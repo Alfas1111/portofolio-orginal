@@ -34,7 +34,7 @@ export const Hero = () => {
             {/* Tag / Badge */}
             <div className="inline-flex items-center gap-2 bg-black text-yellow-400 px-4 py-1.5 text-xs font-mono font-bold tracking-wider uppercase border-2 border-black shadow-[4px_4px_0px_#000]">
               <Sparkles className="w-4 h-4 text-yellow-400 animate-pulse" />
-              <span>HELLO, I'M {personal.name || 'ARYAN SHARMA'}</span>
+              <span>HELLO, I'M {personal.name || 'MUHAMMED ALFAS'}</span>
             </div>
 
             {/* Sub-tagline */}

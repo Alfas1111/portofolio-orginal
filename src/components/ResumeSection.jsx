@@ -35,7 +35,7 @@ export const ResumeSection = () => {
           <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
             <a
               href={personal.resumeUrl}
-              download={personal.resumeFileName || 'Aryan_Sharma_BCA_Resume.pdf'}
+              download={personal.resumeFileName || 'Muhammed_Alfas_BCA_Resume.pdf'}
               target="_blank"
               rel="noopener noreferrer"
               className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-8 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider"

@@ -265,7 +265,7 @@ export const ContactAndCTA = () => {
                         required
                         value={formState.message}
                         onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                        placeholder="Hi Aryan, I'd like to discuss building..."
+                        placeholder="Hi Muhammed, I'd like to discuss building..."
                         className="w-full bg-black border-2 border-zinc-700 focus:border-yellow-400 text-white p-3 font-sans text-sm outline-none transition-colors"
                       ></textarea>
                     </div>

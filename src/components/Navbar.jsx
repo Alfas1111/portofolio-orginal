@@ -66,11 +66,11 @@ export const Navbar = () => {
             title="Double-click or triple-click for secret admin access"
           >
             <span className="bg-yellow-400 text-black px-2.5 py-1 font-display font-extrabold text-xl tracking-tighter border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
-              AS.
+              MA.
             </span>
             <div className="flex flex-col">
               <span className="font-heading text-lg font-bold tracking-tight text-white group-hover:text-yellow-400 transition-colors">
-                {data.personal.name || 'ARYAN SHARMA'}
+                {data.personal.name || 'MUHAMMED ALFAS'}
               </span>
               <span className="text-[10px] font-mono tracking-wider text-zinc-400 uppercase -mt-1">
                 BCA • Software Engineer
