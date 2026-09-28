@@ -40,6 +40,7 @@ export const Navbar = () => {
     { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
     { name: 'Education', href: '#education' },
+    { name: 'Internships', href: '#internships' },
     { name: 'Certifications', href: '#certifications' },
     { name: 'Achievements', href: '#achievements' },
     { name: 'Ideas & Startups', href: '#startups' },

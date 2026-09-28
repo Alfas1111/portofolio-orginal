@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import {
-  X, Save, RotateCcw, Download, Upload, User, Code, FolderGit2, GraduationCap, Award, Rocket, FileText, Image as ImageIcon, Share2, Mail, Plus, Trash2, Edit2, Layout, BookOpen
+  X, Save, RotateCcw, Download, Upload, User, Code, FolderGit2, GraduationCap, Award, Rocket, FileText, Image as ImageIcon, Share2, Mail, Plus, Trash2, Edit2, Layout, BookOpen, Briefcase
 } from 'lucide-react';
 
 export const AdminCMSModal = () => {
@@ -169,6 +169,38 @@ export const AdminCMSModal = () => {
     }));
   };
 
+  // Internships handlers
+  const handleAddInternship = () => {
+    const newInternship = {
+      id: 'in_' + Date.now(),
+      role: 'Software Engineering Intern',
+      company: 'Tech Solutions Inc.',
+      location: 'Remote / Hybrid',
+      duration: 'Jun 2024 – Aug 2024',
+      type: 'Full-Time Internship',
+      stipend: 'Paid Internship',
+      description: 'Developed scalable web applications and integrated REST APIs.',
+      responsibilities: [
+        'Built responsive frontend components using React and Tailwind CSS.',
+        'Collaborated with senior engineers on backend optimization and code reviews.'
+      ],
+      technologies: ['React', 'JavaScript', 'Node.js', 'Git'],
+      certificateLink: '',
+      status: 'Completed'
+    };
+    setFormData((prev) => ({
+      ...prev,
+      internships: [newInternship, ...(prev.internships || [])]
+    }));
+  };
+
+  const handleDeleteInternship = (id) => {
+    setFormData((prev) => ({
+      ...prev,
+      internships: (prev.internships || []).filter((i) => i.id !== id)
+    }));
+  };
+
   // Certifications handlers
   const handleAddCert = () => {
     const newCert = {
@@ -310,6 +342,7 @@ export const AdminCMSModal = () => {
     { id: 'skills', name: 'Skills Stack', icon: Code },
     { id: 'projects', name: 'Projects', icon: FolderGit2 },
     { id: 'education', name: 'Education', icon: GraduationCap },
+    { id: 'internships', name: 'Internships', icon: Briefcase },
     { id: 'certifications', name: 'Certifications', icon: Award },
     { id: 'achievements', name: 'Achievements', icon: Award },
     { id: 'ideas', name: 'Startup Ideas', icon: Rocket },
@@ -874,6 +907,223 @@ export const AdminCMSModal = () => {
                             }));
                           }}
                           className="w-full bg-black border border-zinc-700 text-white p-2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5.5: INTERNSHIPS */}
+          {activeTab === 'internships' && (
+            <div className="space-y-6 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+                <h4 className="font-heading text-lg font-bold text-yellow-400">
+                  MANAGE INTERNSHIPS & PRACTICAL TRAINING ({formData.internships?.length || 0})
+                </h4>
+                <button
+                  onClick={handleAddInternship}
+                  className="brutal-btn bg-yellow-400 text-black px-4 py-2 text-xs font-bold flex items-center gap-1.5"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>ADD INTERNSHIP</span>
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {formData.internships?.map((intern, iIdx) => (
+                  <div key={intern.id || iIdx} className="bg-zinc-900 border-2 border-zinc-700 p-4 space-y-3">
+                    <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                      <span className="text-yellow-400 font-bold uppercase">
+                        INTERNSHIP #{iIdx + 1}: {intern.role} @ {intern.company}
+                      </span>
+                      <button onClick={() => handleDeleteInternship(intern.id)} className="text-red-400 hover:text-white p-1">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-zinc-400 block mb-1">ROLE / POSITION TITLE</label>
+                        <input
+                          type="text"
+                          value={intern.role || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, role: val } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 block mb-1">COMPANY / ORGANIZATION</label>
+                        <input
+                          type="text"
+                          value={intern.company || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, company: val } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-zinc-400 block mb-1">DURATION (e.g. Jan 2024 – Apr 2024)</label>
+                        <input
+                          type="text"
+                          value={intern.duration || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, duration: val } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 block mb-1">LOCATION / WORK MODE</label>
+                        <input
+                          type="text"
+                          value={intern.location || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, location: val } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 block mb-1">STATUS</label>
+                        <select
+                          value={intern.status || 'Completed'}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, status: val } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                        >
+                          <option value="Completed">Completed</option>
+                          <option value="Ongoing">Ongoing</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-zinc-400 block mb-1">INTERNSHIP TYPE (e.g. Full-Time Internship)</label>
+                        <input
+                          type="text"
+                          value={intern.type || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, type: val } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 block mb-1">STIPEND / COMPENSATION</label>
+                        <input
+                          type="text"
+                          value={intern.stipend || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, stipend: val } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-400 block mb-1">DESCRIPTION SUMMARY</label>
+                      <textarea
+                        rows="2"
+                        value={intern.description || ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setFormData((prev) => ({
+                            ...prev,
+                            internships: prev.internships.map((item) => item.id === intern.id ? { ...item, description: val } : item)
+                          }));
+                        }}
+                        className="w-full bg-black border border-zinc-700 text-white p-2"
+                      ></textarea>
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-400 block mb-1">KEY RESPONSIBILITIES (One per line)</label>
+                      <textarea
+                        rows="3"
+                        value={Array.isArray(intern.responsibilities) ? intern.responsibilities.join('\n') : (intern.responsibilities || '')}
+                        onChange={(e) => {
+                          const lines = e.target.value.split('\n');
+                          setFormData((prev) => ({
+                            ...prev,
+                            internships: prev.internships.map((item) => item.id === intern.id ? { ...item, responsibilities: lines } : item)
+                          }));
+                        }}
+                        className="w-full bg-black border border-zinc-700 text-white p-2"
+                        placeholder="e.g. Developed REST API endpoints&#10;Configured CI/CD pipelines"
+                      ></textarea>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-zinc-400 block mb-1">TECHNOLOGIES (Comma-separated)</label>
+                        <input
+                          type="text"
+                          value={Array.isArray(intern.technologies) ? intern.technologies.join(', ') : (intern.technologies || '')}
+                          onChange={(e) => {
+                            const list = e.target.value.split(',').map(s => s.trim());
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, technologies: list } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                          placeholder="React, Java, MySQL, AWS"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 block mb-1">CERTIFICATE / VERIFICATION LINK URL</label>
+                        <input
+                          type="text"
+                          value={intern.certificateLink || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData((prev) => ({
+                              ...prev,
+                              internships: prev.internships.map((item) => item.id === intern.id ? { ...item, certificateLink: val } : item)
+                            }));
+                          }}
+                          className="w-full bg-black border border-zinc-700 text-white p-2"
+                          placeholder="https://..."
                         />
                       </div>
                     </div>

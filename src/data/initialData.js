@@ -141,6 +141,61 @@ export const initialPortfolioData = {
     }
   ],
   experienceFallbackMessage: "Currently building experience through projects, internships, certifications and independent learning.",
+  internships: [
+    {
+      id: "in1",
+      role: "Software Engineering Intern",
+      company: "Cognizant Technology Solutions",
+      location: "Bangalore / Remote",
+      duration: "Jan 2024 – Apr 2024",
+      type: "Full-Time Internship",
+      stipend: "Paid Internship",
+      description: "Engineered scalable RESTful API microservices in Java & Spring Boot. Participated in daily Agile standups, code reviews, and database query optimizations.",
+      responsibilities: [
+        "Developed 12+ API endpoints for user authentication & data processing using Java Spring Boot.",
+        "Refactored legacy SQL queries, improving backend response times by 40%.",
+        "Configured Docker containers and GitHub Actions pipelines for automated CI/CD deployment."
+      ],
+      technologies: ["Java", "Spring Boot", "MySQL", "REST API", "Docker", "Git"],
+      certificateLink: "https://example.com/certificate/internship-cognizant",
+      status: "Completed"
+    },
+    {
+      id: "in2",
+      role: "Frontend Development Intern",
+      company: "PixelCraft Tech Labs",
+      location: "Kochi, Kerala (Hybrid)",
+      duration: "May 2024 – Jul 2024",
+      type: "Summer Internship",
+      stipend: "Paid Internship",
+      description: "Built modern responsive UI components using React.js and Tailwind CSS for client SaaS web applications.",
+      responsibilities: [
+        "Crafted interactive data visualization dashboards with Recharts & Framer Motion.",
+        "Collaborated with UI/UX designers to implement pixel-perfect brutalist design tokens.",
+        "Optimized client-side bundle size, boosting Google Lighthouse performance score to 98."
+      ],
+      technologies: ["React.js", "JavaScript (ES6+)", "Tailwind CSS", "Framer Motion", "Vite"],
+      certificateLink: "https://example.com/certificate/internship-pixelcraft",
+      status: "Completed"
+    },
+    {
+      id: "in3",
+      role: "Cloud & DevOps Trainee Intern",
+      company: "Apex Cloud Innovations",
+      location: "Bangalore, India",
+      duration: "Aug 2024 – Present",
+      type: "Part-Time / Project Internship",
+      stipend: "Performance Based",
+      description: "Working on cloud infrastructure deployment, AWS S3 bucket policies, Serverless Functions, and web monitoring setups.",
+      responsibilities: [
+        "Managed S3 bucket security, CloudFront CDN distribution, and Route 53 domain mappings.",
+        "Automated SSL certificate renewals and AWS CloudWatch log alerts."
+      ],
+      technologies: ["AWS S3", "AWS EC2", "CloudFront", "Linux", "Bash", "Node.js"],
+      certificateLink: "",
+      status: "Ongoing"
+    }
+  ],
   certifications: [
     {
       id: "c1",
