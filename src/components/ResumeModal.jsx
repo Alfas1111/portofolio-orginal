@@ -3,7 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { X, Download, FileText, ExternalLink } from 'lucide-react';
 
 export const ResumeModal = () => {
-  const { data, resumeModalOpen, setResumeModalOpen } = usePortfolio();
+  const { data, resumeModalOpen, setResumeModalOpen, downloadResume } = usePortfolio();
   const { personal } = data;
 
   if (!resumeModalOpen) return null;
@@ -29,16 +29,13 @@ export const ResumeModal = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <a
-              href={personal.resumeUrl}
-              download={personal.resumeFileName}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="brutal-btn bg-yellow-400 text-black px-4 py-2 text-xs font-extrabold flex items-center gap-2"
+            <button
+              onClick={downloadResume}
+              className="brutal-btn bg-yellow-400 text-black px-4 py-2 text-xs font-extrabold flex items-center gap-2 cursor-pointer"
             >
               <Download className="w-4 h-4" />
               <span>DOWNLOAD</span>
-            </a>
+            </button>
             <button
               onClick={() => setResumeModalOpen(false)}
               className="p-2 bg-zinc-800 hover:bg-yellow-400 hover:text-black transition-colors"

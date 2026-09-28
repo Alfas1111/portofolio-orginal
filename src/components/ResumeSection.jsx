@@ -4,7 +4,7 @@ import { FileText, Download, Eye, Sparkles, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const ResumeSection = () => {
-  const { data, setResumeModalOpen } = usePortfolio();
+  const { data, setResumeModalOpen, downloadResume } = usePortfolio();
   const { personal } = data;
 
   return (
@@ -33,16 +33,13 @@ export const ResumeSection = () => {
 
           {/* Action Buttons */}
           <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={personal.resumeUrl}
-              download={personal.resumeFileName || 'Muhammed_Alfas_BCA_Resume.pdf'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-8 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider"
+            <button
+              onClick={downloadResume}
+              className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-8 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider cursor-pointer"
             >
               <Download className="w-5 h-5" />
               <span>DOWNLOAD RESUME</span>
-            </a>
+            </button>
 
             <button
               onClick={() => setResumeModalOpen(true)}

@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { ArrowDownRight, FileText, Camera, Edit3, Sparkles, Code2, Cpu } from 'lucide-react';
+import { ArrowDownRight, FileText, Camera, Edit3, Sparkles, Code2, Cpu, Download, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Hero = () => {
-  const { data, setIsCropperOpen, setResumeModalOpen, isAdminMode } = usePortfolio();
+  const { data, setIsCropperOpen, setResumeModalOpen, downloadResume, isAdminMode } = usePortfolio();
   const { personal } = data;
 
   const imgStyle = personal.imagePosition
@@ -64,11 +64,20 @@ export const Hero = () => {
               </a>
 
               <button
-                onClick={() => setResumeModalOpen(true)}
-                className="brutal-btn bg-white text-black hover:bg-black hover:text-yellow-400 px-7 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider"
+                onClick={downloadResume}
+                className="brutal-btn bg-black text-white hover:bg-white hover:text-black px-7 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider"
               >
-                <FileText className="w-5 h-5" />
+                <Download className="w-5 h-5 text-yellow-400" />
                 <span>DOWNLOAD RESUME</span>
+              </button>
+
+              <button
+                onClick={() => setResumeModalOpen(true)}
+                className="brutal-btn bg-white text-black hover:bg-black hover:text-yellow-400 px-5 py-4 text-sm font-extrabold flex items-center gap-2 tracking-wider"
+                title="Preview Resume"
+              >
+                <Eye className="w-5 h-5" />
+                <span>PREVIEW</span>
               </button>
             </div>
 
