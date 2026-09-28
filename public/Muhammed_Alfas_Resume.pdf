@@ -1,0 +1,61 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 380 >>
+stream
+BT
+/F1 22 Tf
+50 730 Td
+(MUHAMMED ALFAS) Tj
+/F1 12 Tf
+0 -25 Td
+(BCA STUDENT | SOFTWARE ENGINEER | TECH ENTHUSIAST) Tj
+0 -20 Td
+(Location: Kerala & Bangalore, India | Email: muhammed.alfas.dev@gmail.com) Tj
+0 -30 Td
+(SUMMARY) Tj
+0 -18 Td
+(Bachelor of Computer Applications student passionate about software engineering,) Tj
+0 -15 Td
+(full-stack web applications, cloud infrastructure, and building digital products.) Tj
+0 -30 Td
+(TECHNICAL SKILLS) Tj
+0 -18 Td
+(Languages: Java, Python, C, JavaScript (ES6+), HTML5, CSS3, SQL) Tj
+0 -15 Td
+(Frameworks & Libraries: React.js, Node.js, Express, Tailwind CSS, Bootstrap) Tj
+0 -15 Td
+(Cloud & Tools: AWS (S3, EC2, CloudFront), Git, GitHub, MySQL, MongoDB, Docker) Tj
+0 -30 Td
+(EDUCATION) Tj
+0 -18 Td
+(Bachelor of Computer Applications (BCA) - Apex Institute of Technology (2023 - Present)) Tj
+0 -15 Td
+(CGPA: 9.2 / 10.0 | Department Top 5 Ranker) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000240 00000 n 
+0000000670 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+735
+%%EOF

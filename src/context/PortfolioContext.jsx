@@ -13,7 +13,10 @@ export const PortfolioProvider = ({ children }) => {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        return { ...initialPortfolioData, ...parsed };
+        if (parsed.personal && (!parsed.personal.resumeUrl || parsed.personal.resumeUrl.includes('w3.org'))) {
+          parsed.personal.resumeUrl = '/Muhammed_Alfas_Resume.pdf';
+        }
+        return { ...initialPortfolioData, ...parsed, personal: { ...initialPortfolioData.personal, ...(parsed.personal || {}) } };
       }
     } catch (e) {
       console.error('Failed to load portfolio data from localStorage', e);

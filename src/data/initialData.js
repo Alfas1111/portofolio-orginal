@@ -14,7 +14,7 @@ export const initialPortfolioData = {
     careerGoal: "To build impactful software products as a Software Engineer and eventually launch a successful tech startup.",
     interests: ["Full-Stack Engineering", "Cloud Computing", "SaaS Architecture", "AI Integration", "Open Source"],
     personalIntro: "Technology is more than my field of study — it's my creative playground where ideas become reality.",
-    resumeUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    resumeUrl: "/Muhammed_Alfas_Resume.pdf",
     resumeFileName: "Muhammed_Alfas_BCA_SoftwareEngineer_Resume.pdf"
   },
   stats: {
