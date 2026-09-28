@@ -54,18 +54,18 @@ export const Hero = () => {
             </p>
 
             {/* Call to Action Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-4">
+            <div className="pt-2 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
               <a
                 href="#projects"
-                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-7 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider group"
+                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-6 sm:px-7 py-3.5 sm:py-4 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2.5 tracking-wider group"
               >
                 <span>VIEW MY WORK</span>
                 <ArrowDownRight className="w-5 h-5 group-hover:translate-x-1 group-hover:translate-y-1 transition-transform" />
               </a>
 
               <button
-                onClick={downloadResume}
-                className="brutal-btn bg-black text-white hover:bg-white hover:text-black px-7 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider"
+                onClick={() => downloadResume()}
+                className="brutal-btn bg-black text-white hover:bg-white hover:text-black px-6 sm:px-7 py-3.5 sm:py-4 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2.5 tracking-wider cursor-pointer"
               >
                 <Download className="w-5 h-5 text-yellow-400" />
                 <span>DOWNLOAD RESUME</span>
@@ -73,7 +73,7 @@ export const Hero = () => {
 
               <button
                 onClick={() => setResumeModalOpen(true)}
-                className="brutal-btn bg-white text-black hover:bg-black hover:text-yellow-400 px-5 py-4 text-sm font-extrabold flex items-center gap-2 tracking-wider"
+                className="brutal-btn bg-white text-black hover:bg-black hover:text-yellow-400 px-5 py-3.5 sm:py-4 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 tracking-wider cursor-pointer"
                 title="Preview Resume"
               >
                 <Eye className="w-5 h-5" />

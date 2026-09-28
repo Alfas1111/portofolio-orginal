@@ -137,47 +137,23 @@ export const PortfolioProvider = ({ children }) => {
     });
   };
 
-  const downloadResume = async () => {
-    const resumeUrl = data?.personal?.resumeUrl || '/resume.pdf';
-    const fileName = data?.personal?.resumeFileName || 'Muhammed_Alfas_BCA_SoftwareEngineer_Resume.pdf';
+  const downloadResume = (customUrl, customName) => {
+    const resumeUrl = customUrl || data?.personal?.resumeUrl || '/Muhammed_Alfas_Resume.pdf';
+    const fileName = customName || data?.personal?.resumeFileName || 'Muhammed_Alfas_BCA_SoftwareEngineer_Resume.pdf';
 
     if (!resumeUrl) {
-      alert('Resume file URL is not available.');
+      alert('Resume file is not available.');
       return;
     }
 
-    try {
-      if (resumeUrl.startsWith('data:') || resumeUrl.startsWith('blob:')) {
-        const link = document.createElement('a');
-        link.href = resumeUrl;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        return;
-      }
-
-      const response = await fetch(resumeUrl);
-      if (!response.ok) throw new Error('Fetch failed');
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(blobUrl);
-    } catch (e) {
-      const link = document.createElement('a');
-      link.href = resumeUrl;
-      link.download = fileName;
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    const link = document.createElement('a');
+    link.href = resumeUrl;
+    link.download = fileName;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (

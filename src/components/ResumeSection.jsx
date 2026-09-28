@@ -32,10 +32,10 @@ export const ResumeSection = () => {
           </p>
 
           {/* Action Buttons */}
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={downloadResume}
-              className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-8 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider cursor-pointer"
+              onClick={() => downloadResume()}
+              className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-3 tracking-wider w-full sm:w-auto cursor-pointer"
             >
               <Download className="w-5 h-5" />
               <span>DOWNLOAD RESUME</span>
@@ -43,7 +43,7 @@ export const ResumeSection = () => {
 
             <button
               onClick={() => setResumeModalOpen(true)}
-              className="brutal-btn bg-white text-black hover:bg-black hover:text-yellow-400 px-8 py-4 text-sm font-extrabold flex items-center gap-3 tracking-wider"
+              className="brutal-btn bg-white text-black hover:bg-black hover:text-yellow-400 px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-3 tracking-wider w-full sm:w-auto cursor-pointer"
             >
               <Eye className="w-5 h-5" />
               <span>VIEW RESUME</span>
