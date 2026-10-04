@@ -4,8 +4,8 @@ import { ExternalLink, Github, FolderGit2, Calendar, Tag, ArrowUpRight } from 'l
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Projects = () => {
-  const { data } = usePortfolio();
-  const { projects } = data;
+  const { data, openAdminTab } = usePortfolio();
+  const projects = data?.projects || [];
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const categories = ['All', ...new Set(projects.map((p) => p.category || 'Other'))];
@@ -19,7 +19,7 @@ export const Projects = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 border-b-2 border-zinc-800 pb-6">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 border-b-2 border-zinc-800 pb-6 gap-4">
           <div>
             <span className="font-mono text-xs font-bold text-yellow-400 uppercase tracking-widest bg-zinc-900 border border-zinc-800 px-3 py-1">
               // 03. SELECTED WORKS
@@ -29,21 +29,32 @@ export const Projects = () => {
             </h2>
           </div>
 
-          {/* Filter Tabs */}
-          <div className="flex flex-wrap gap-2 mt-6 lg:mt-0">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 font-mono text-xs font-bold uppercase transition-all border ${
-                  selectedCategory === cat
-                    ? 'bg-yellow-400 text-black border-yellow-400 shadow-[3px_3px_0px_#FFF]'
-                    : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-600'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Filter Tabs */}
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2 font-mono text-xs font-bold uppercase transition-all border ${
+                    selectedCategory === cat
+                      ? 'bg-yellow-400 text-black border-yellow-400 shadow-[3px_3px_0px_#FFF]'
+                      : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-600'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => openAdminTab('projects')}
+              className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-4 py-2 text-xs font-extrabold flex items-center gap-1.5 shadow-[3px_3px_0px_#FFF] shrink-0"
+              title="Add or edit projects"
+            >
+              <FolderGit2 className="w-3.5 h-3.5" />
+              <span>EDIT PROJECTS</span>
+            </button>
           </div>
         </div>
 

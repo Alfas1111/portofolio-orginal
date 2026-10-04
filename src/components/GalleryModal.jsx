@@ -8,18 +8,19 @@ export const GalleryModal = () => {
   if (!galleryModalData) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-      <div className="bg-black text-white border-4 border-yellow-400 w-full max-w-3xl p-6 shadow-[16px_16px_0px_#000] space-y-4 relative">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-          <div className="flex items-center gap-2">
-            <ImageIcon className="w-5 h-5 text-yellow-400" />
-            <h3 className="font-heading text-xl font-bold uppercase text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/90 backdrop-blur-md">
+      <div className="bg-black text-white border-4 border-yellow-400 w-full max-w-3xl p-4 sm:p-6 shadow-[6px_6px_0px_#000] sm:shadow-[16px_16px_0px_#000] space-y-4 relative max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <ImageIcon className="w-5 h-5 text-yellow-400 shrink-0" />
+            <h3 className="font-heading text-lg sm:text-xl font-bold uppercase text-white truncate">
               {galleryModalData.title}
             </h3>
           </div>
           <button
             onClick={() => setGalleryModalData(null)}
-            className="p-1 text-zinc-400 hover:text-white"
+            className="p-1.5 bg-zinc-800 text-zinc-300 hover:bg-yellow-400 hover:text-black transition-colors shrink-0"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>

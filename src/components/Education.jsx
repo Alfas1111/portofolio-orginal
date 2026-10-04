@@ -4,7 +4,7 @@ import { GraduationCap, School, BookOpen, Award, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Education = () => {
-  const { data } = usePortfolio();
+  const { data, openAdminTab } = usePortfolio();
   const { education } = data;
 
   return (
@@ -12,7 +12,7 @@ export const Education = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b-4 border-black pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b-4 border-black pb-6 gap-4">
           <div>
             <span className="font-mono text-xs font-bold bg-black text-yellow-400 px-3 py-1 uppercase tracking-widest">
               // 04. ACADEMIC BACKGROUND
@@ -21,9 +21,19 @@ export const Education = () => {
               EDUCATION <span className="underline decoration-black decoration-4">& QUALIFICATIONS</span>
             </h2>
           </div>
-          <p className="font-mono text-xs font-bold text-black/80 max-w-sm mt-4 md:mt-0 uppercase">
-            Computer Applications coursework & academic milestones.
-          </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <p className="font-mono text-xs font-bold text-black/80 max-w-xs uppercase">
+              Computer Applications coursework & academic milestones.
+            </p>
+            <button
+              onClick={() => openAdminTab('education')}
+              className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
+              title="Edit education history and coursework"
+            >
+              <GraduationCap className="w-4 h-4" />
+              <span>EDIT EDUCATION</span>
+            </button>
+          </div>
         </div>
 
         {/* Timeline Layout */}

@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Layout, Server, Cpu, Sparkles, ArrowRight } from 'lucide-react';
+import { Layout, Server, Cpu, Sparkles, ArrowRight, Edit2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Services = () => {
-  const { data } = usePortfolio();
+  const { data, isAdminMode, openAdminTab } = usePortfolio();
   const { services } = data;
 
   const serviceIcons = [Layout, Server, Cpu, Sparkles];
@@ -14,7 +14,7 @@ export const Services = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b-2 border-zinc-800 pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b-2 border-zinc-800 pb-6 gap-4">
           <div>
             <span className="font-mono text-xs font-bold text-yellow-400 uppercase tracking-widest bg-zinc-900 border border-zinc-800 px-3 py-1">
               // 09. OFFERINGS
@@ -23,9 +23,20 @@ export const Services = () => {
               SERVICES <span className="text-yellow-400">& CAPABILITIES</span>
             </h2>
           </div>
-          <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm mt-4 md:mt-0 uppercase">
-            Technical solutions for clients, startups & academic teams.
-          </p>
+          <div className="flex flex-col md:items-end gap-3 mt-4 md:mt-0">
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab?.('services')}
+                className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFD700] cursor-pointer"
+              >
+                <Edit2 className="w-3.5 h-3.5" />
+                <span>EDIT SERVICES</span>
+              </button>
+            )}
+            <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm uppercase text-left md:text-right">
+              Technical solutions for clients, startups & academic teams.
+            </p>
+          </div>
         </div>
 
         {/* Services Grid */}

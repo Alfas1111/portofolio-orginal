@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { FileText, Download, Eye, Sparkles, CheckCircle2 } from 'lucide-react';
+import { FileText, Download, Eye, Sparkles, CheckCircle2, Edit2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const ResumeSection = () => {
-  const { data, setResumeModalOpen, downloadResume } = usePortfolio();
+  const { data, setResumeModalOpen, downloadResume, isAdminMode, openAdminTab } = usePortfolio();
   const { personal } = data;
 
   return (
@@ -48,6 +48,16 @@ export const ResumeSection = () => {
               <Eye className="w-5 h-5" />
               <span>VIEW RESUME</span>
             </button>
+
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab?.('social')}
+                className="brutal-btn bg-zinc-900 text-yellow-400 hover:bg-white hover:text-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-3 tracking-wider w-full sm:w-auto cursor-pointer border-2 border-black"
+              >
+                <Edit2 className="w-5 h-5" />
+                <span>UPLOAD RESUME FILE</span>
+              </button>
+            )}
           </div>
 
           <div className="pt-4 flex flex-wrap items-center justify-center gap-6 font-mono text-xs font-bold text-black/80">

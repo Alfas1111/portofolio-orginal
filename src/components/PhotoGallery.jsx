@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Image as ImageIcon, Eye, Tag, Maximize2, X } from 'lucide-react';
+import { Image as ImageIcon, Eye, Tag, Maximize2, X, Instagram, ExternalLink, Edit2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const PhotoGallery = () => {
-  const { data, setGalleryModalData } = usePortfolio();
-  const { gallery } = data;
+  const { data, setGalleryModalData, isAdminMode, openAdminTab } = usePortfolio();
+  const { gallery, social } = data;
   const [selectedCat, setSelectedCat] = useState('All');
 
   const categories = ['All', ...new Set(gallery ? gallery.map((g) => g.category || 'General') : [])];
@@ -19,23 +19,47 @@ export const PhotoGallery = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 border-b-4 border-black pb-6">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 border-b-4 border-black pb-6 gap-4">
           <div>
             <span className="font-mono text-xs font-bold bg-black text-yellow-400 px-3 py-1 uppercase tracking-widest">
-              // 11. VISUAL SNAPSHOTS
+              // 11. VISUAL SNAPSHOTS & INSTAGRAM
             </span>
             <h2 className="font-display text-4xl sm:text-6xl font-extrabold uppercase mt-3 tracking-tight">
               PERSONAL <span className="underline decoration-black decoration-4">GALLERY</span>
             </h2>
           </div>
 
-          {/* Categories Filter */}
-          <div className="flex flex-wrap gap-2 mt-6 lg:mt-0">
+          {/* Categories Filter & Instagram Action */}
+          <div className="flex flex-wrap items-center gap-2 mt-4 lg:mt-0">
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab?.('gallery')}
+                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-3.5 py-2 font-mono text-xs font-bold uppercase flex items-center gap-2 transition-colors cursor-pointer"
+              >
+                <Edit2 className="w-3.5 h-3.5" />
+                <span>UPLOAD / EDIT PHOTOS</span>
+              </button>
+            )}
+
+            {social?.instagram && (
+              <a
+                href={social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-3.5 py-2 font-mono text-xs font-bold uppercase flex items-center gap-2 transition-colors cursor-pointer"
+                title="Follow on Instagram"
+              >
+                <Instagram className="w-4 h-4 text-yellow-400 group-hover:text-black" />
+                <span>FOLLOW ON INSTAGRAM</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            )}
+
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCat(cat)}
-                className={`px-4 py-2 font-mono text-xs font-bold uppercase border border-black transition-all ${
+                className={`px-3 sm:px-4 py-2 font-mono text-xs font-bold uppercase border border-black transition-all ${
                   selectedCat === cat
                     ? 'bg-black text-yellow-400 shadow-[3px_3px_0px_#FFF]'
                     : 'bg-white text-black hover:bg-black hover:text-white'

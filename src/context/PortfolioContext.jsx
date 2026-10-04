@@ -16,7 +16,12 @@ export const PortfolioProvider = ({ children }) => {
         if (parsed.personal && (!parsed.personal.resumeUrl || parsed.personal.resumeUrl.includes('w3.org'))) {
           parsed.personal.resumeUrl = '/Muhammed_Alfas_Resume.pdf';
         }
-        return { ...initialPortfolioData, ...parsed, personal: { ...initialPortfolioData.personal, ...(parsed.personal || {}) } };
+        return {
+          ...initialPortfolioData,
+          ...parsed,
+          personal: { ...initialPortfolioData.personal, ...(parsed.personal || {}) },
+          social: { ...initialPortfolioData.social, ...(parsed.social || {}) }
+        };
       }
     } catch (e) {
       console.error('Failed to load portfolio data from localStorage', e);
@@ -39,18 +44,26 @@ export const PortfolioProvider = ({ children }) => {
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('admin') === 'true') return true;
-        return localStorage.getItem(ADMIN_KEY) === 'true';
+        const stored = localStorage.getItem(ADMIN_KEY);
+        if (stored !== null) return stored === 'true';
+        return true;
       }
     } catch (e) {}
-    return false;
+    return true;
   });
 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [adminActiveTab, setAdminActiveTab] = useState('personal');
   const [isCropperOpen, setIsCropperOpen] = useState(false);
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
   const [blogModalData, setBlogModalData] = useState(null);
   const [certModalData, setCertModalData] = useState(null);
   const [galleryModalData, setGalleryModalData] = useState(null);
+
+  const openAdminTab = (tabId = 'personal') => {
+    setAdminActiveTab(tabId);
+    setIsAdminOpen(true);
+  };
 
   // Keyboard shortcut listener: Ctrl + Shift + E or Cmd + Shift + E
   useEffect(() => {
@@ -171,6 +184,9 @@ export const PortfolioProvider = ({ children }) => {
         toggleAdminMode,
         isAdminOpen,
         setIsAdminOpen,
+        adminActiveTab,
+        setAdminActiveTab,
+        openAdminTab,
         isCropperOpen,
         setIsCropperOpen,
         resumeModalOpen,

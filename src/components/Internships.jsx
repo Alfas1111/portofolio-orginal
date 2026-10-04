@@ -11,12 +11,13 @@ import {
   Sparkles,
   Code2,
   Award,
-  Layers
+  Layers,
+  Edit2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Internships = () => {
-  const { data } = usePortfolio();
+  const { data, isAdminMode, openAdminTab } = usePortfolio();
   const internships = data?.internships || [];
   const [activeFilter, setActiveFilter] = useState('ALL');
 
@@ -36,7 +37,7 @@ export const Internships = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b-2 border-zinc-800 pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b-2 border-zinc-800 pb-6 gap-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs font-bold text-black bg-yellow-400 border border-yellow-400 px-3 py-1 uppercase tracking-widest">
@@ -52,6 +53,15 @@ export const Internships = () => {
           </div>
 
           <div className="mt-6 md:mt-0 flex flex-col md:items-end gap-3">
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab?.('internships')}
+                className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFD700] cursor-pointer"
+              >
+                <Edit2 className="w-3.5 h-3.5" />
+                <span>MANAGE INTERNSHIPS</span>
+              </button>
+            )}
             <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm uppercase text-left md:text-right">
               Hands-on industry internships, corporate training & startup software engineering roles.
             </p>
@@ -150,6 +160,16 @@ export const Internships = () => {
                           <span>VERIFY CERTIFICATE</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
+                      )}
+
+                      {isAdminMode && (
+                        <button
+                          onClick={() => openAdminTab?.('internships')}
+                          className="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-yellow-400 bg-zinc-800 border border-yellow-400/40 hover:bg-yellow-400 hover:text-black px-2 py-0.5 transition-colors cursor-pointer mt-1"
+                        >
+                          <Edit2 className="w-3 h-3" />
+                          <span>EDIT ROLE</span>
+                        </button>
                       )}
                     </div>
                   </div>

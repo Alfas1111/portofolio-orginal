@@ -4,7 +4,7 @@ import { Briefcase, Calendar, CheckCircle, Code, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Experience = () => {
-  const { data } = usePortfolio();
+  const { data, openAdminTab, isAdminMode } = usePortfolio();
   const { experience, experienceFallbackMessage } = data;
 
   const hasExperience = experience && experience.length > 0;
@@ -14,7 +14,7 @@ export const Experience = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b-2 border-zinc-800 pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b-2 border-zinc-800 pb-6 gap-4">
           <div>
             <span className="font-mono text-xs font-bold text-yellow-400 uppercase tracking-widest bg-zinc-900 border border-zinc-800 px-3 py-1">
               // 05. CAREER TRACK
@@ -23,9 +23,19 @@ export const Experience = () => {
               EXPERIENCE <span className="text-yellow-400">& ROLES</span>
             </h2>
           </div>
-          <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm mt-4 md:mt-0 uppercase">
-            Internships, freelance contracts, college projects & tech leadership.
-          </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <p className="font-mono text-xs font-bold text-zinc-400 max-w-xs uppercase">
+              Internships, freelance contracts, college projects & tech leadership.
+            </p>
+            <button
+              onClick={() => openAdminTab('experience')}
+              className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
+              title="Add or edit career experience"
+            >
+              <Briefcase className="w-4 h-4" />
+              <span>EDIT EXPERIENCE</span>
+            </button>
+          </div>
         </div>
 
         {/* Experience List or Fallback */}

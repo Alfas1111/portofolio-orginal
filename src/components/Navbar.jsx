@@ -93,7 +93,7 @@ export const Navbar = () => {
           </nav>
 
           {/* Action Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden xl:flex items-center gap-3">
             {/* ONLY VISIBLE WHEN ADMIN MODE IS UNLOCKED */}
             {isAdminMode && (
               <button
@@ -116,7 +116,7 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile menu toggle button */}
-          <div className="flex lg:hidden items-center gap-2">
+          <div className="flex xl:hidden items-center gap-2">
             {isAdminMode && (
               <button
                 onClick={() => setIsAdminOpen(true)}
@@ -139,14 +139,14 @@ export const Navbar = () => {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#0A0A0A] border-b-4 border-yellow-400 px-4 pt-4 pb-6 space-y-3">
-          <div className="grid grid-cols-2 gap-2">
+        <div className="xl:hidden bg-[#0A0A0A] border-b-4 border-yellow-400 px-4 pt-4 pb-6 space-y-3 shadow-2xl max-h-[80vh] overflow-y-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2 text-sm font-heading font-bold text-zinc-200 hover:bg-yellow-400 hover:text-black rounded border border-zinc-800 transition-colors"
+                className="block px-3 py-2 text-xs sm:text-sm font-heading font-bold text-zinc-200 hover:bg-yellow-400 hover:text-black rounded border border-zinc-800 transition-colors"
               >
                 {link.name}
               </a>

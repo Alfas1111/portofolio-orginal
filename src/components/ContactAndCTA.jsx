@@ -51,27 +51,27 @@ export const ContactAndCTA = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="bg-black text-white border-4 border-black p-8 sm:p-14 shadow-[16px_16px_0px_#000] space-y-8"
+            className="bg-black text-white border-4 border-black p-5 sm:p-14 shadow-[8px_8px_0px_#000] sm:shadow-[16px_16px_0px_#000] space-y-6 sm:space-y-8"
           >
-            <div className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-1.5 font-mono text-xs font-bold uppercase border-2 border-black">
-              <Flame className="w-4 h-4 text-black animate-bounce" />
+            <div className="inline-flex items-center gap-2 bg-yellow-400 text-black px-3 sm:px-4 py-1.5 font-mono text-[11px] sm:text-xs font-bold uppercase border-2 border-black">
+              <Flame className="w-4 h-4 text-black animate-bounce shrink-0" />
               <span>STARTUP & FOUNDER COLLABORATION</span>
             </div>
 
-            <h2 className="font-display text-4xl sm:text-6xl xl:text-7xl font-extrabold uppercase leading-[0.95] tracking-tighter text-yellow-400">
+            <h2 className="font-display text-3xl sm:text-6xl xl:text-7xl font-extrabold uppercase leading-[0.98] sm:leading-[0.95] tracking-tighter text-yellow-400">
               {ctaSection?.title || "HAVE AN IDEA? LET'S BUILD IT."}
             </h2>
 
-            <p className="font-sans text-lg sm:text-2xl text-zinc-200 font-medium leading-relaxed max-w-3xl border-l-4 border-yellow-400 pl-4 py-1">
+            <p className="font-sans text-base sm:text-2xl text-zinc-200 font-medium leading-relaxed max-w-3xl border-l-4 border-yellow-400 pl-3 sm:pl-4 py-1">
               {ctaSection?.body ||
                 "I’m always interested in discovering new ideas, exploring startup opportunities, collaborating on innovative projects, and turning promising concepts into real products."}
             </p>
 
             {/* CTAs */}
-            <div className="pt-4 flex flex-wrap items-center gap-4">
+            <div className="pt-2 sm:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
               <a
                 href="#contact"
-                className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-8 py-4 text-sm sm:text-base font-extrabold flex items-center gap-3 tracking-wider group"
+                className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-base font-extrabold flex items-center justify-center gap-3 tracking-wider group"
               >
                 <span>{ctaSection?.primaryBtnText || "LET'S BUILD SOMETHING →"}</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -79,14 +79,14 @@ export const ContactAndCTA = () => {
 
               <a
                 href="#contact"
-                className="brutal-btn bg-zinc-800 text-white hover:bg-yellow-400 hover:text-black px-6 py-4 text-xs sm:text-sm font-bold tracking-wider"
+                className="brutal-btn bg-zinc-800 text-white hover:bg-yellow-400 hover:text-black px-5 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm font-bold tracking-wider text-center"
               >
                 {ctaSection?.secondaryBtn1Text || "SHARE AN IDEA"}
               </a>
 
               <a
                 href="#contact"
-                className="brutal-btn bg-zinc-800 text-white hover:bg-yellow-400 hover:text-black px-6 py-4 text-xs sm:text-sm font-bold tracking-wider"
+                className="brutal-btn bg-zinc-800 text-white hover:bg-yellow-400 hover:text-black px-5 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm font-bold tracking-wider text-center"
               >
                 {ctaSection?.secondaryBtn2Text || "START A COLLABORATION"}
               </a>
