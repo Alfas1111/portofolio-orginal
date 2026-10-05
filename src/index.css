@@ -1,6 +1,24 @@
 @import "tailwindcss";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    overflow-x: hidden;
+  }
+
+  @media (max-width: 768px) {
+    html {
+      scroll-padding-top: 4.5rem;
+    }
+  }
+
+  body {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+
   /* Dynamic Theme Variables */
   :root, [data-theme="yellow-black"] {
     --bg-primary: #FFD700;

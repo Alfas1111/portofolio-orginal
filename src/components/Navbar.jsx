@@ -50,6 +50,31 @@ export const Navbar = () => {
     { name: 'Contact', href: '#contact' },
   ];
 
+  // Smooth scroll handler taking mobile drawer closing and fixed navbar into account
+  const handleNavClick = (e, href) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+
+    setTimeout(() => {
+      if (href === '#hero' || href === '#') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        if (window.history.pushState) window.history.pushState(null, '', href);
+        return;
+      }
+
+      const target = document.querySelector(href);
+      if (target) {
+        const navbarHeight = window.innerWidth <= 768 ? 70 : 80;
+        const elementPosition = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: Math.max(0, elementPosition - navbarHeight),
+          behavior: 'smooth'
+        });
+        if (window.history.pushState) window.history.pushState(null, '', href);
+      }
+    }, 120);
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
@@ -85,6 +110,7 @@ export const Navbar = () => {
               <a
                 key={link.name}
                 href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className="px-2.5 py-1 text-zinc-300 hover:text-yellow-400 hover:bg-zinc-800/60 rounded transition-all uppercase"
               >
                 {link.name}
@@ -108,7 +134,8 @@ export const Navbar = () => {
 
             <a
               href="#contact"
-              className="brutal-btn flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 text-xs font-extrabold tracking-wider hover:bg-white transition-all"
+              onClick={(e) => handleNavClick(e, '#contact')}
+              className="brutal-btn flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 text-xs font-extrabold tracking-wider hover:bg-white transition-all cursor-pointer"
             >
               <span>LET'S CONNECT</span>
               <ArrowRight className="w-4 h-4" />
@@ -145,7 +172,7 @@ export const Navbar = () => {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className="block px-3 py-2 text-xs sm:text-sm font-heading font-bold text-zinc-200 hover:bg-yellow-400 hover:text-black rounded border border-zinc-800 transition-colors"
               >
                 {link.name}
@@ -155,8 +182,8 @@ export const Navbar = () => {
           <div className="pt-2 flex flex-col gap-2">
             <a
               href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center brutal-btn bg-yellow-400 text-black py-2.5 font-bold text-sm tracking-wider flex items-center justify-center gap-2"
+              onClick={(e) => handleNavClick(e, '#contact')}
+              className="w-full text-center brutal-btn bg-yellow-400 text-black py-2.5 font-bold text-sm tracking-wider flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>LET'S CONNECT</span>
               <ArrowRight className="w-4 h-4" />

@@ -57,7 +57,20 @@ export const Hero = () => {
             <div className="pt-2 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
               <a
                 href="#projects"
-                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-6 sm:px-7 py-3.5 sm:py-4 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2.5 tracking-wider group"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const target = document.querySelector('#projects');
+                  if (target) {
+                    const navbarHeight = window.innerWidth <= 768 ? 70 : 80;
+                    const elementPosition = target.getBoundingClientRect().top + window.scrollY;
+                    window.scrollTo({
+                      top: Math.max(0, elementPosition - navbarHeight),
+                      behavior: 'smooth'
+                    });
+                    if (window.history.pushState) window.history.pushState(null, '', '#projects');
+                  }
+                }}
+                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-6 sm:px-7 py-3.5 sm:py-4 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2.5 tracking-wider group cursor-pointer"
               >
                 <span>VIEW MY WORK</span>
                 <ArrowDownRight className="w-5 h-5 group-hover:translate-x-1 group-hover:translate-y-1 transition-transform" />
@@ -99,12 +112,12 @@ export const Hero = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-5 flex justify-center"
+            className="lg:col-span-5 flex justify-center px-2 sm:px-0"
           >
-            <div className="relative group w-full max-w-md">
+            <div className="relative group w-full max-w-sm sm:max-w-md mx-auto">
               {/* Offset Decorative Background Rectangles */}
-              <div className="absolute -inset-4 bg-black border-4 border-black transform translate-x-4 translate-y-4 shadow-2xl"></div>
-              <div className="absolute -inset-2 bg-white border-4 border-black transform -translate-x-2 -translate-y-2"></div>
+              <div className="absolute -inset-2 sm:-inset-4 bg-black border-4 border-black transform translate-x-2 sm:translate-x-4 translate-y-2 sm:translate-y-4 shadow-2xl"></div>
+              <div className="absolute -inset-1 sm:-inset-2 bg-white border-4 border-black transform -translate-x-1 sm:-translate-x-2 -translate-y-1 sm:-translate-y-2"></div>
 
               {/* Photo Frame */}
               <div className="relative border-4 border-black bg-zinc-900 aspect-[4/5] overflow-hidden">
@@ -116,11 +129,11 @@ export const Hero = () => {
                 />
 
                 {/* Yellow Offset Badge Overlay */}
-                <div className="absolute bottom-4 left-4 right-4 bg-yellow-400 border-2 border-black p-3 shadow-[4px_4px_0px_#000]">
-                  <p className="font-heading font-bold text-sm text-black uppercase tracking-tight">
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 bg-yellow-400 border-2 border-black p-2.5 sm:p-3 shadow-[3px_3px_0px_#000] sm:shadow-[4px_4px_0px_#000]">
+                  <p className="font-heading font-bold text-xs sm:text-sm text-black uppercase tracking-tight">
                     {personal.name}
                   </p>
-                  <p className="font-mono text-xs font-bold text-black/80">
+                  <p className="font-mono text-[10px] sm:text-xs font-bold text-black/80">
                     BCA CANDIDATE • 2023 - 2026
                   </p>
                 </div>
@@ -129,17 +142,17 @@ export const Hero = () => {
                 {isAdminMode && (
                   <button
                     onClick={() => setIsCropperOpen(true)}
-                    className="absolute top-4 right-4 bg-black text-yellow-400 p-3 border-2 border-black shadow-[4px_4px_0px_#fff] opacity-95 hover:opacity-100 hover:scale-105 transition-all flex items-center gap-2 font-mono text-xs font-bold"
+                    className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-black text-yellow-400 p-2 sm:p-3 border-2 border-black shadow-[3px_3px_0px_#fff] sm:shadow-[4px_4px_0px_#fff] opacity-95 hover:opacity-100 hover:scale-105 transition-all flex items-center gap-2 font-mono text-[11px] sm:text-xs font-bold cursor-pointer"
                     title="Upload, Crop & Adjust Profile Photo"
                   >
-                    <Camera className="w-4 h-4" />
+                    <Camera className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     <span>EDIT PHOTO</span>
                   </button>
                 )}
               </div>
 
               {/* Decorative Corner Labels */}
-              <div className="absolute -top-6 -left-6 bg-black text-white px-3 py-1 font-mono text-[11px] font-bold border-2 border-black shadow-[3px_3px_0px_#FFD700]">
+              <div className="absolute -top-3 left-2 sm:-top-6 sm:-left-6 bg-black text-white px-2.5 sm:px-3 py-0.5 sm:py-1 font-mono text-[10px] sm:text-[11px] font-bold border-2 border-black shadow-[2px_2px_0px_#FFD700] sm:shadow-[3px_3px_0px_#FFD700]">
                 STUDENT • DEV
               </div>
             </div>

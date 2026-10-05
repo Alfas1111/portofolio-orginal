@@ -79,7 +79,7 @@ export const ThemeSwitcher = () => {
             initial={{ opacity: 0, scale: 0.9, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
-            className="absolute bottom-16 right-0 w-80 sm:w-96 bg-black text-white border-4 border-yellow-400 p-5 shadow-[12px_12px_0px_#000] z-50 space-y-4"
+            className="absolute bottom-16 right-0 w-[calc(100vw-2.5rem)] max-w-sm sm:w-96 bg-black text-white border-4 border-yellow-400 p-4 sm:p-5 shadow-[6px_6px_0px_#000] sm:shadow-[12px_12px_0px_#000] z-50 space-y-4"
           >
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
