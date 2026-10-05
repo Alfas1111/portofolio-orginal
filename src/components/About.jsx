@@ -4,7 +4,7 @@ import { User, GraduationCap, MapPin, Target, Heart, Sparkles, BookOpen, Clock, 
 import { motion } from 'framer-motion';
 
 export const About = () => {
-  const { data, openAdminTab } = usePortfolio();
+  const { data, openAdminTab, isAdminMode } = usePortfolio();
   const { personal, stats } = data;
 
   const statItems = [
@@ -35,14 +35,26 @@ export const About = () => {
             <p className="font-italic-accent text-zinc-400 text-lg md:text-xl max-w-md italic">
               "Combining computer application fundamentals with modern engineering execution."
             </p>
-            <button
-              onClick={() => openAdminTab('personal')}
-              className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#FFF] shrink-0"
-              title="Edit personal details, bio, and interests"
-            >
-              <Edit2 className="w-4 h-4" />
-              <span>EDIT ABOUT</span>
-            </button>
+            {isAdminMode && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => openAdminTab('personal')}
+                  className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#FFF] shrink-0"
+                  title="Edit personal details, bio, and interests"
+                >
+                  <Edit2 className="w-4 h-4" />
+                  <span>EDIT ABOUT</span>
+                </button>
+                <button
+                  onClick={() => openAdminTab('stats')}
+                  className="brutal-btn bg-zinc-900 text-yellow-400 border border-yellow-400 hover:bg-white hover:text-black px-3 py-2.5 text-xs font-extrabold flex items-center gap-1.5 shadow-[4px_4px_0px_#FFF] shrink-0"
+                  title="Edit stats and metrics"
+                >
+                  <Award className="w-3.5 h-3.5" />
+                  <span>STATS</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

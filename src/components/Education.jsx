@@ -4,7 +4,7 @@ import { GraduationCap, School, BookOpen, Award, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Education = () => {
-  const { data, openAdminTab } = usePortfolio();
+  const { data, openAdminTab, isAdminMode } = usePortfolio();
   const { education } = data;
 
   return (
@@ -25,14 +25,16 @@ export const Education = () => {
             <p className="font-mono text-xs font-bold text-black/80 max-w-xs uppercase">
               Computer Applications coursework & academic milestones.
             </p>
-            <button
-              onClick={() => openAdminTab('education')}
-              className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
-              title="Edit education history and coursework"
-            >
-              <GraduationCap className="w-4 h-4" />
-              <span>EDIT EDUCATION</span>
-            </button>
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab('education')}
+                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
+                title="Edit education history and coursework"
+              >
+                <GraduationCap className="w-4 h-4" />
+                <span>EDIT EDUCATION</span>
+              </button>
+            )}
           </div>
         </div>
 

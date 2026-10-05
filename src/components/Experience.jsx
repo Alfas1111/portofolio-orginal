@@ -27,14 +27,16 @@ export const Experience = () => {
             <p className="font-mono text-xs font-bold text-zinc-400 max-w-xs uppercase">
               Internships, freelance contracts, college projects & tech leadership.
             </p>
-            <button
-              onClick={() => openAdminTab('experience')}
-              className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
-              title="Add or edit career experience"
-            >
-              <Briefcase className="w-4 h-4" />
-              <span>EDIT EXPERIENCE</span>
-            </button>
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab('experience')}
+                className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
+                title="Add or edit career experience"
+              >
+                <Briefcase className="w-4 h-4" />
+                <span>EDIT EXPERIENCE</span>
+              </button>
+            )}
           </div>
         </div>
 

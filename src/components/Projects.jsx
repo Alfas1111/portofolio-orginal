@@ -4,7 +4,7 @@ import { ExternalLink, Github, FolderGit2, Calendar, Tag, ArrowUpRight } from 'l
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Projects = () => {
-  const { data, openAdminTab } = usePortfolio();
+  const { data, openAdminTab, isAdminMode } = usePortfolio();
   const projects = data?.projects || [];
   const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -47,14 +47,16 @@ export const Projects = () => {
               ))}
             </div>
 
-            <button
-              onClick={() => openAdminTab('projects')}
-              className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-4 py-2 text-xs font-extrabold flex items-center gap-1.5 shadow-[3px_3px_0px_#FFF] shrink-0"
-              title="Add or edit projects"
-            >
-              <FolderGit2 className="w-3.5 h-3.5" />
-              <span>EDIT PROJECTS</span>
-            </button>
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab('projects')}
+                className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-4 py-2 text-xs font-extrabold flex items-center gap-1.5 shadow-[3px_3px_0px_#FFF] shrink-0"
+                title="Add or edit projects"
+              >
+                <FolderGit2 className="w-3.5 h-3.5" />
+                <span>EDIT PROJECTS</span>
+              </button>
+            )}
           </div>
         </div>
 

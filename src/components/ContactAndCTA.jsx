@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Mail, MapPin, Linkedin, Github, Instagram, Facebook, Twitter, Send, ArrowRight, Sparkles, CheckCircle2, MessageSquare, Flame } from 'lucide-react';
+import { Mail, MapPin, Linkedin, Github, Instagram, Facebook, Twitter, Send, ArrowRight, Sparkles, CheckCircle2, MessageSquare, Flame, Edit2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
 export const ContactAndCTA = () => {
-  const { data } = usePortfolio();
+  const { data, isAdminMode, openAdminTab } = usePortfolio();
   const { social, personal, ctaSection } = data;
 
   const [formState, setFormState] = useState({ name: '', email: '', subject: '', message: '' });
@@ -53,9 +53,21 @@ export const ContactAndCTA = () => {
             viewport={{ once: true }}
             className="bg-black text-white border-4 border-black p-5 sm:p-14 shadow-[8px_8px_0px_#000] sm:shadow-[16px_16px_0px_#000] space-y-6 sm:space-y-8"
           >
-            <div className="inline-flex items-center gap-2 bg-yellow-400 text-black px-3 sm:px-4 py-1.5 font-mono text-[11px] sm:text-xs font-bold uppercase border-2 border-black">
-              <Flame className="w-4 h-4 text-black animate-bounce shrink-0" />
-              <span>STARTUP & FOUNDER COLLABORATION</span>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="inline-flex items-center gap-2 bg-yellow-400 text-black px-3 sm:px-4 py-1.5 font-mono text-[11px] sm:text-xs font-bold uppercase border-2 border-black">
+                <Flame className="w-4 h-4 text-black animate-bounce shrink-0" />
+                <span>STARTUP & FOUNDER COLLABORATION</span>
+              </div>
+              {isAdminMode && (
+                <button
+                  onClick={() => openAdminTab?.('cta')}
+                  className="inline-flex items-center gap-2 bg-yellow-400 text-black px-3.5 py-1.5 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFF] cursor-pointer"
+                  title="Edit Startup CTA section content"
+                >
+                  <Edit2 className="w-3.5 h-3.5" />
+                  <span>EDIT CTA</span>
+                </button>
+              )}
             </div>
 
             <h2 className="font-display text-3xl sm:text-6xl xl:text-7xl font-extrabold uppercase leading-[0.98] sm:leading-[0.95] tracking-tighter text-yellow-400">
@@ -123,7 +135,7 @@ export const ContactAndCTA = () => {
       <section id="contact" className="py-20 bg-[#0A0A0A] text-white border-b-4 border-yellow-400 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b-2 border-zinc-800 pb-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b-2 border-zinc-800 pb-6 gap-4">
             <div>
               <span className="font-mono text-xs font-bold text-yellow-400 uppercase tracking-widest bg-zinc-900 border border-zinc-800 px-3 py-1">
                 // 12. GET IN TOUCH
@@ -132,9 +144,21 @@ export const ContactAndCTA = () => {
                 CONTACT <span className="text-yellow-400">ME</span>
               </h2>
             </div>
-            <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm mt-4 md:mt-0 uppercase">
-              Send a direct message or connect across developer platforms.
-            </p>
+            <div className="flex flex-col md:items-end gap-3 mt-4 md:mt-0">
+              {isAdminMode && (
+                <button
+                  onClick={() => openAdminTab?.('social')}
+                  className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFD700] cursor-pointer"
+                  title="Edit contact email and social profiles"
+                >
+                  <Edit2 className="w-3.5 h-3.5" />
+                  <span>EDIT SOCIAL & CONTACT</span>
+                </button>
+              )}
+              <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm uppercase text-left md:text-right">
+                Send a direct message or connect across developer platforms.
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
