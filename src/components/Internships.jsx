@@ -41,7 +41,7 @@ export const Internships = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs font-bold text-black bg-yellow-400 border border-yellow-400 px-3 py-1 uppercase tracking-widest">
-                // 06. INDUSTRY EXPERIENCE
+                // 05. INDUSTRY EXPERIENCE
               </span>
               <span className="font-mono text-xs text-yellow-400 bg-zinc-900 border border-zinc-800 px-2.5 py-1">
                 {internships.length} ROLES RECORDED

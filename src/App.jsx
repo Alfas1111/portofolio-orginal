@@ -6,7 +6,6 @@ import { About } from './components/About';
 import { Skills } from './components/Skills';
 import { Projects } from './components/Projects';
 import { Education } from './components/Education';
-import { Experience } from './components/Experience';
 import { Internships } from './components/Internships';
 import { Certifications } from './components/Certifications';
 import { Achievements } from './components/Achievements';
@@ -72,7 +71,6 @@ export const PortfolioContent = () => {
         <Skills />
         <Projects />
         <Education />
-        <Experience />
         <Internships />
         <Certifications />
         <Achievements />

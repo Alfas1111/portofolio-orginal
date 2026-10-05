@@ -453,7 +453,6 @@ export const AdminCMSModal = () => {
     { id: 'skills', name: 'Skills Stack', icon: Code },
     { id: 'projects', name: 'Projects', icon: FolderGit2 },
     { id: 'education', name: 'Education', icon: GraduationCap },
-    { id: 'experience', name: 'Experience', icon: Briefcase },
     { id: 'internships', name: 'Internships', icon: Briefcase },
     { id: 'certifications', name: 'Certifications', icon: Award },
     { id: 'achievements', name: 'Achievements', icon: Award },
