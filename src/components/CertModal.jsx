@@ -3,7 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { X, ExternalLink, Award, Download, Edit2, FileText, CheckCircle } from 'lucide-react';
 
 export const CertModal = () => {
-  const { certModalData, setCertModalData, openAdminTab } = usePortfolio();
+  const { certModalData, setCertModalData, openAdminTab, isAdminMode } = usePortfolio();
 
   if (!certModalData) return null;
 
@@ -38,14 +38,16 @@ export const CertModal = () => {
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={handleEditClick}
-              className="p-1.5 bg-zinc-900 border border-zinc-700 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors text-xs font-mono font-bold flex items-center gap-1"
-              title="Edit this certificate in CMS"
-            >
-              <Edit2 className="w-4 h-4" />
-              <span className="hidden sm:inline">EDIT</span>
-            </button>
+            {isAdminMode && (
+              <button
+                onClick={handleEditClick}
+                className="p-1.5 bg-zinc-900 border border-zinc-700 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors text-xs font-mono font-bold flex items-center gap-1 cursor-pointer"
+                title="Edit this certificate in CMS"
+              >
+                <Edit2 className="w-4 h-4" />
+                <span className="hidden sm:inline">EDIT</span>
+              </button>
+            )}
             <button
               onClick={() => setCertModalData(null)}
               className="p-1.5 bg-zinc-800 text-zinc-300 hover:bg-yellow-400 hover:text-black transition-colors"

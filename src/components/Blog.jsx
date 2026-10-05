@@ -25,14 +25,16 @@ export const Blog = () => {
             <p className="font-mono text-xs font-bold text-black/90 max-w-xs uppercase">
               Technical writing, computer science guides & software architecture logs.
             </p>
-            <button
-              onClick={() => openAdminTab('blog')}
-              className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
-              title="Add or edit blog posts in CMS"
-            >
-              <Plus className="w-4 h-4" />
-              <span>WRITE / EDIT ARTICLES</span>
-            </button>
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab('blog')}
+                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
+                title="Add or edit blog posts in CMS"
+              >
+                <Plus className="w-4 h-4" />
+                <span>WRITE / EDIT ARTICLES</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -102,13 +104,19 @@ export const Blog = () => {
             <p className="font-mono text-xs text-zinc-400 max-w-md mx-auto">
               Share your technical guides, computer science notes, and development logs.
             </p>
-            <button
-              onClick={() => openAdminTab('blog')}
-              className="brutal-btn bg-yellow-400 text-black px-6 py-3 font-bold text-xs inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>WRITE YOUR FIRST ARTICLE</span>
-            </button>
+            {isAdminMode ? (
+              <button
+                onClick={() => openAdminTab('blog')}
+                className="brutal-btn bg-yellow-400 text-black px-6 py-3 font-bold text-xs inline-flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span>WRITE YOUR FIRST ARTICLE</span>
+              </button>
+            ) : (
+              <span className="font-mono text-xs text-yellow-400 font-bold block pt-2">
+                // ARTICLES COMING SOON
+              </span>
+            )}
           </div>
         )}
 

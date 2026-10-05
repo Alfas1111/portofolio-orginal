@@ -5,7 +5,9 @@ const PortfolioContext = createContext();
 
 const LOCAL_STORAGE_KEY = 'bca_portfolio_data_v2';
 const THEME_STORAGE_KEY = 'bca_portfolio_theme_v2';
-const ADMIN_KEY = 'bca_admin_unlocked_v1';
+const AUTH_STORAGE_KEY = 'portfolio_admin_auth_v1';
+const PASSCODE_STORAGE_KEY = 'portfolio_admin_passcode_v1';
+export const DEFAULT_ADMIN_PASSCODE = 'alfas2026';
 
 export const PortfolioProvider = ({ children }) => {
   const [data, setData] = useState(() => {
@@ -39,20 +41,58 @@ export const PortfolioProvider = ({ children }) => {
     return 'yellow-black';
   });
 
+  // Admin Master Passcode
+  const [adminPasscode, setAdminPasscodeState] = useState(() => {
+    try {
+      return localStorage.getItem(PASSCODE_STORAGE_KEY) || DEFAULT_ADMIN_PASSCODE;
+    } catch (e) {
+      return DEFAULT_ADMIN_PASSCODE;
+    }
+  });
+
+  const setAdminPasscode = (newPass) => {
+    const trimmed = (newPass || '').trim();
+    if (!trimmed) return;
+    try {
+      localStorage.setItem(PASSCODE_STORAGE_KEY, trimmed);
+      setAdminPasscodeState(trimmed);
+    } catch (e) {
+      console.error('Failed to save passcode', e);
+    }
+  };
+
+  // Only true if authenticated via secret passcode or valid auth session
   const [isAdminMode, setIsAdminMode] = useState(() => {
     try {
       if (typeof window !== 'undefined') {
+        const storedPass = localStorage.getItem(PASSCODE_STORAGE_KEY) || DEFAULT_ADMIN_PASSCODE;
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('admin') === 'true') return true;
-        const stored = localStorage.getItem(ADMIN_KEY);
-        if (stored !== null) return stored === 'true';
-        return true;
+        const adminParam = urlParams.get('admin');
+
+        // Secret URL access: ?admin=alfas2026 (or custom passcode)
+        if (adminParam && adminParam.trim() === storedPass.trim()) {
+          sessionStorage.setItem(AUTH_STORAGE_KEY, 'authenticated');
+          localStorage.setItem(AUTH_STORAGE_KEY, 'authenticated');
+          urlParams.delete('admin');
+          const cleanQuery = urlParams.toString() ? `?${urlParams.toString()}` : '';
+          window.history.replaceState({}, document.title, window.location.pathname + cleanQuery + window.location.hash);
+          return true;
+        }
+
+        // Check existing authenticated session
+        const isSessionAuth = sessionStorage.getItem(AUTH_STORAGE_KEY) === 'authenticated';
+        const isLocalAuth = localStorage.getItem(AUTH_STORAGE_KEY) === 'authenticated';
+        if (isSessionAuth || isLocalAuth) {
+          return true;
+        }
       }
     } catch (e) {}
-    return true;
+    // Default to false for all visitors!
+    return false;
   });
 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [adminActiveTab, setAdminActiveTab] = useState('personal');
   const [isCropperOpen, setIsCropperOpen] = useState(false);
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
@@ -61,8 +101,45 @@ export const PortfolioProvider = ({ children }) => {
   const [galleryModalData, setGalleryModalData] = useState(null);
 
   const openAdminTab = (tabId = 'personal') => {
+    if (!isAdminMode) {
+      setIsAuthModalOpen(true);
+      return;
+    }
     setAdminActiveTab(tabId);
     setIsAdminOpen(true);
+  };
+
+  const requestAdminAccess = () => {
+    if (isAdminMode) {
+      setIsAdminOpen(true);
+    } else {
+      setIsAuthModalOpen(true);
+    }
+  };
+
+  const verifyAndUnlock = (inputPasscode) => {
+    const trimmed = (inputPasscode || '').trim();
+    if (trimmed === adminPasscode.trim()) {
+      try {
+        sessionStorage.setItem(AUTH_STORAGE_KEY, 'authenticated');
+        localStorage.setItem(AUTH_STORAGE_KEY, 'authenticated');
+      } catch (e) {}
+      setIsAdminMode(true);
+      setIsAuthModalOpen(false);
+      setIsAdminOpen(true);
+      return true;
+    }
+    return false;
+  };
+
+  const lockAdminMode = () => {
+    try {
+      sessionStorage.removeItem(AUTH_STORAGE_KEY);
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+    } catch (e) {}
+    setIsAdminMode(false);
+    setIsAdminOpen(false);
+    setIsAuthModalOpen(false);
   };
 
   // Keyboard shortcut listener: Ctrl + Shift + E or Cmd + Shift + E
@@ -70,17 +147,12 @@ export const PortfolioProvider = ({ children }) => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'E' || e.key === 'e')) {
         e.preventDefault();
-        setIsAdminMode((prev) => {
-          const next = !prev;
-          localStorage.setItem(ADMIN_KEY, next ? 'true' : 'false');
-          if (next) setIsAdminOpen(true);
-          return next;
-        });
+        requestAdminAccess();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [isAdminMode]);
 
   useEffect(() => {
     try {
@@ -182,6 +254,13 @@ export const PortfolioProvider = ({ children }) => {
         isAdminMode,
         setIsAdminMode,
         toggleAdminMode,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
+        adminPasscode,
+        setAdminPasscode,
+        requestAdminAccess,
+        verifyAndUnlock,
+        lockAdminMode,
         isAdminOpen,
         setIsAdminOpen,
         adminActiveTab,

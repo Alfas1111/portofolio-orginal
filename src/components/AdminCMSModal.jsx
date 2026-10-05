@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { compressAndReadFile } from '../utils/fileHelpers';
 import {
-  X, Save, RotateCcw, Download, Upload, User, Code, FolderGit2, GraduationCap, Award, Rocket, FileText, Image as ImageIcon, Share2, Mail, Plus, Trash2, Edit2, Layout, BookOpen, Briefcase, Instagram, ExternalLink, Eye, Check, FileCheck, AlertCircle
+  X, Save, RotateCcw, Download, Upload, User, Code, FolderGit2, GraduationCap, Award, Rocket, FileText, Image as ImageIcon, Share2, Mail, Plus, Trash2, Edit2, Layout, BookOpen, Briefcase, Instagram, ExternalLink, Eye, Check, FileCheck, AlertCircle, Lock
 } from 'lucide-react';
 
 export const AdminCMSModal = () => {
@@ -15,7 +15,10 @@ export const AdminCMSModal = () => {
     isAdminOpen,
     setIsAdminOpen,
     adminActiveTab,
-    setAdminActiveTab
+    setAdminActiveTab,
+    lockAdminMode,
+    adminPasscode,
+    setAdminPasscode
   } = usePortfolio();
 
   const [activeTab, setActiveTab] = useState(adminActiveTab || 'personal');
@@ -481,6 +484,15 @@ export const AdminCMSModal = () => {
 
           <div className="flex items-center gap-2">
             <button
+              onClick={lockAdminMode}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white hover:bg-black font-mono text-xs font-bold border border-black cursor-pointer shadow-[2px_2px_0px_#000]"
+              title="Lock Admin Mode & Hide All Edit Controls"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span>LOCK ADMIN</span>
+            </button>
+
+            <button
               onClick={exportJSON}
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-black text-white hover:bg-white hover:text-black font-mono text-xs font-bold border border-black"
               title="Export Portfolio Backup JSON"
@@ -702,6 +714,26 @@ export const AdminCMSModal = () => {
                   onChange={(e) => updatePersonal('aboutBio', e.target.value)}
                   className="w-full bg-zinc-900 border border-zinc-700 text-white p-2.5 outline-none focus:border-yellow-400"
                 ></textarea>
+              </div>
+
+              {/* Secret Admin Passcode Config */}
+              <div className="p-4 bg-zinc-900 border-2 border-yellow-400 font-mono text-xs space-y-2 mt-4">
+                <div className="flex items-center gap-2 text-yellow-400 font-bold">
+                  <Lock className="w-4 h-4" />
+                  <span>PRIVATE MASTER PASSCODE (ONLY YOU CAN EDIT)</span>
+                </div>
+                <p className="text-zinc-400 text-[11px]">
+                  Other visitors will NEVER see edit options. Only you can unlock editing by entering this passcode or visiting with <span className="text-yellow-400 font-bold">?admin={adminPasscode}</span>.
+                </p>
+                <div className="flex items-center gap-2 max-w-sm pt-1">
+                  <input
+                    type="text"
+                    value={adminPasscode}
+                    onChange={(e) => setAdminPasscode(e.target.value)}
+                    className="flex-1 bg-black border border-zinc-700 text-yellow-400 p-2.5 outline-none focus:border-yellow-400 font-bold"
+                  />
+                  <span className="text-[11px] text-green-400 font-bold shrink-0">✓ Auto-saved</span>
+                </div>
               </div>
             </div>
           )}

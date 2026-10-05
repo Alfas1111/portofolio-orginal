@@ -16,6 +16,7 @@ import { ResumeSection } from './components/ResumeSection';
 import { PhotoGallery } from './components/PhotoGallery';
 import { ContactAndCTA } from './components/ContactAndCTA';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
+import { AdminAuthModal } from './components/AdminAuthModal';
 import { AdminCMSModal } from './components/AdminCMSModal';
 import { ImageCropperModal } from './components/ImageCropperModal';
 import { ResumeModal } from './components/ResumeModal';
@@ -101,6 +102,7 @@ export const PortfolioContent = () => {
 
       {/* Interactive Controls & Modals */}
       <ThemeSwitcher />
+      <AdminAuthModal />
       <AdminCMSModal />
       <ImageCropperModal />
       <ResumeModal />

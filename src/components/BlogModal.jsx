@@ -3,7 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { X, Calendar, Clock, BookOpen, Edit2 } from 'lucide-react';
 
 export const BlogModal = () => {
-  const { blogModalData, setBlogModalData, openAdminTab } = usePortfolio();
+  const { blogModalData, setBlogModalData, openAdminTab, isAdminMode } = usePortfolio();
 
   if (!blogModalData) return null;
 
@@ -31,14 +31,16 @@ export const BlogModal = () => {
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={handleEditClick}
-              className="p-1.5 sm:p-2 bg-zinc-900 border border-zinc-700 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors font-mono text-xs font-bold flex items-center gap-1.5"
-              title="Edit this article in CMS"
-            >
-              <Edit2 className="w-4 h-4" />
-              <span className="hidden sm:inline">EDIT ARTICLE</span>
-            </button>
+            {isAdminMode && (
+              <button
+                onClick={handleEditClick}
+                className="p-1.5 sm:p-2 bg-zinc-900 border border-zinc-700 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                title="Edit this article in CMS"
+              >
+                <Edit2 className="w-4 h-4" />
+                <span className="hidden sm:inline">EDIT ARTICLE</span>
+              </button>
+            )}
             <button
               onClick={() => setBlogModalData(null)}
               className="p-1.5 sm:p-2 bg-zinc-800 text-zinc-300 hover:bg-yellow-400 hover:text-black transition-colors shrink-0"

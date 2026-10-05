@@ -25,14 +25,16 @@ export const Certifications = () => {
             <p className="font-mono text-xs font-bold text-black/80 max-w-xs uppercase">
               Industry recognized cloud & developer certifications.
             </p>
-            <button
-              onClick={() => openAdminTab('certifications')}
-              className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
-              title="Upload your own certificates or edit credentials"
-            >
-              <Upload className="w-4 h-4" />
-              <span>UPLOAD / EDIT CERTIFICATES</span>
-            </button>
+            {isAdminMode && (
+              <button
+                onClick={() => openAdminTab('certifications')}
+                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
+                title="Upload your own certificates or edit credentials"
+              >
+                <Upload className="w-4 h-4" />
+                <span>UPLOAD / EDIT CERTIFICATES</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -167,13 +169,19 @@ export const Certifications = () => {
             <p className="font-mono text-xs text-zinc-400 max-w-md mx-auto">
               Upload your cloud certifications, course badges, and academic credentials here.
             </p>
-            <button
-              onClick={() => openAdminTab('certifications')}
-              className="brutal-btn bg-yellow-400 text-black px-6 py-3 font-bold text-xs inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>UPLOAD YOUR OWN CERTIFICATE NOW</span>
-            </button>
+            {isAdminMode ? (
+              <button
+                onClick={() => openAdminTab('certifications')}
+                className="brutal-btn bg-yellow-400 text-black px-6 py-3 font-bold text-xs inline-flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span>UPLOAD YOUR OWN CERTIFICATE NOW</span>
+              </button>
+            ) : (
+              <span className="font-mono text-xs text-yellow-400 font-bold block pt-2">
+                // CREDENTIALS BEING UPDATED
+              </span>
+            )}
           </div>
         )}
 

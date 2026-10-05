@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Menu, X, Settings, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Menu, X, Settings, ArrowRight, ShieldCheck, Lock } from 'lucide-react';
 
 export const Navbar = () => {
-  const { data, setIsAdminOpen, isAdminMode, toggleAdminMode } = usePortfolio();
+  const { data, setIsAdminOpen, isAdminMode, requestAdminAccess, lockAdminMode } = usePortfolio();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
@@ -16,14 +16,12 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Triple-click on logo unlocks/toggles Admin mode!
-  const handleLogoClick = (e) => {
+  // Triple-click on logo requests admin passcode verification
+  const handleLogoClick = () => {
     setClickCount((prev) => {
       const next = prev + 1;
       if (next >= 3) {
-        toggleAdminMode();
-        setIsAdminOpen(true);
-        alert('⚡ SECRET ADMIN MODE UNLOCKED! You can now edit portfolio content.');
+        requestAdminAccess();
         return 0;
       }
       return next;
@@ -31,7 +29,7 @@ export const Navbar = () => {
 
     setTimeout(() => {
       setClickCount(0);
-    }, 1500);
+    }, 1200);
   };
 
   const navLinks = [
@@ -85,11 +83,10 @@ export const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Logo (Triple-click unlocks Admin Mode) */}
+          {/* Brand Logo */}
           <div
             onClick={handleLogoClick}
             className="flex items-center gap-2 group cursor-pointer select-none"
-            title="Double-click or triple-click for secret admin access"
           >
             <span className="bg-yellow-400 text-black px-2.5 py-1 font-display font-extrabold text-xl tracking-tighter border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
               MA.
@@ -122,14 +119,23 @@ export const Navbar = () => {
           <div className="hidden xl:flex items-center gap-3">
             {/* ONLY VISIBLE WHEN ADMIN MODE IS UNLOCKED */}
             {isAdminMode && (
-              <button
-                onClick={() => setIsAdminOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-bold bg-yellow-400 text-black hover:bg-white border border-black shadow-[2px_2px_0px_#000] transition-all rounded"
-                title="Admin Mode Active (Press Ctrl+Shift+E anytime)"
-              >
-                <Settings className="w-3.5 h-3.5" />
-                <span>EDIT PORTFOLIO</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsAdminOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-bold bg-yellow-400 text-black hover:bg-white border border-black shadow-[2px_2px_0px_#000] transition-all rounded cursor-pointer"
+                  title="Edit Portfolio Content"
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                  <span>EDIT PORTFOLIO</span>
+                </button>
+                <button
+                  onClick={lockAdminMode}
+                  className="p-1.5 bg-red-600 text-white hover:bg-black border border-black rounded transition-all cursor-pointer"
+                  title="Lock & Exit Admin Mode"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                </button>
+              </div>
             )}
 
             <a
@@ -145,13 +151,22 @@ export const Navbar = () => {
           {/* Mobile menu toggle button */}
           <div className="flex xl:hidden items-center gap-2">
             {isAdminMode && (
-              <button
-                onClick={() => setIsAdminOpen(true)}
-                className="p-2 bg-yellow-400 text-black rounded border border-black"
-                title="Edit Content"
-              >
-                <Settings className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setIsAdminOpen(true)}
+                  className="p-2 bg-yellow-400 text-black rounded border border-black cursor-pointer"
+                  title="Edit Content"
+                >
+                  <Settings className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={lockAdminMode}
+                  className="p-2 bg-red-600 text-white rounded border border-black cursor-pointer"
+                  title="Lock Admin Mode"
+                >
+                  <Lock className="w-5 h-5" />
+                </button>
+              </div>
             )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
