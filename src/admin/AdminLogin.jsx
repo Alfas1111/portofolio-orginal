@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Lock, Mail, Eye, EyeOff, ShieldAlert, ArrowRight, AlertTriangle, Sparkles } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ShieldAlert, ArrowRight } from 'lucide-react';
 
 const AdminLogin = () => {
-  const { login, loginDevMode, isAdmin, user, loading, isSupabaseConfigured } = useAuth();
+  const { login, isAdmin, user, loading } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,12 +28,6 @@ const AdminLogin = () => {
     e.preventDefault();
     setError('');
 
-    if (!isSupabaseConfigured) {
-      loginDevMode();
-      navigate('/admin', { replace: true });
-      return;
-    }
-
     if (!email.trim() || !password.trim()) {
       setError('Please enter both email and password.');
       return;
@@ -44,15 +38,10 @@ const AdminLogin = () => {
       await login(email.trim(), password);
       navigate('/admin', { replace: true });
     } catch (err) {
-      setError(err.message || 'Login failed. Please check your credentials.');
+      setError(err.message || 'Invalid credentials. Access denied.');
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleDevLogin = () => {
-    loginDevMode();
-    navigate('/admin', { replace: true });
   };
 
   if (loading) {
@@ -88,31 +77,6 @@ const AdminLogin = () => {
           </p>
         </div>
 
-        {/* Not configured warning with quick preview access */}
-        {!isSupabaseConfigured && (
-          <div className="mb-6 p-4 bg-amber-950/60 border-2 border-amber-500 flex flex-col gap-3">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-mono text-xs font-bold text-amber-400 uppercase">Supabase Cloud Not Connected</p>
-                <p className="font-sans text-xs text-amber-200 mt-1">
-                  Add <code className="bg-black/50 px-1 py-0.5 text-yellow-300">VITE_SUPABASE_URL</code> and{' '}
-                  <code className="bg-black/50 px-1 py-0.5 text-yellow-300">VITE_SUPABASE_ANON_KEY</code> to your{' '}
-                  <code className="bg-black/50 px-1 py-0.5 text-yellow-300">.env</code> file for cloud auth.
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleDevLogin}
-              className="w-full py-2.5 px-4 bg-yellow-400 text-black font-mono text-xs font-extrabold flex items-center justify-center gap-2 hover:bg-white transition-colors cursor-pointer border border-black shadow-[2px_2px_0px_#000]"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>EXPLORE ADMIN DASHBOARD NOW (DEV PREVIEW)</span>
-            </button>
-          </div>
-        )}
-
         {/* Login Form */}
         <div className="bg-[#111] border-4 border-yellow-400 p-6 sm:p-8 shadow-[8px_8px_0px_#000]">
           <div className="flex items-center gap-3 mb-6">
@@ -142,7 +106,7 @@ const AdminLogin = () => {
                   type="email"
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); setError(''); }}
-                  placeholder="admin@example.com"
+                  placeholder="alfasthestarboy707@gmail.com"
                   className="w-full bg-zinc-900 text-white font-mono text-sm pl-10 pr-4 py-3 border-2 border-zinc-700 focus:border-yellow-400 focus:outline-none transition-colors"
                   disabled={isSubmitting}
                   autoComplete="email"
@@ -161,7 +125,7 @@ const AdminLogin = () => {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                  placeholder="Enter password..."
+                  placeholder="Enter your admin password..."
                   className="w-full bg-zinc-900 text-white font-mono text-sm pl-10 pr-11 py-3 border-2 border-zinc-700 focus:border-yellow-400 focus:outline-none transition-colors"
                   disabled={isSubmitting}
                   autoComplete="current-password"
@@ -177,7 +141,7 @@ const AdminLogin = () => {
               </div>
             </div>
 
-            {/* Error */}
+            {/* Error Message */}
             {error && (
               <div className="flex items-center gap-2 p-3 bg-red-950/80 border-2 border-red-500 text-red-300 font-mono text-xs">
                 <ShieldAlert className="w-4 h-4 shrink-0 text-red-400" />
