@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
-import { PortfolioProvider } from './context/PortfolioContext';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
+
+// Public Portfolio Components
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -16,15 +20,36 @@ import { ResumeSection } from './components/ResumeSection';
 import { PhotoGallery } from './components/PhotoGallery';
 import { ContactAndCTA } from './components/ContactAndCTA';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
-import { AdminAuthModal } from './components/AdminAuthModal';
-import { AdminCMSModal } from './components/AdminCMSModal';
-import { ImageCropperModal } from './components/ImageCropperModal';
+
+// Viewer Modals
 import { ResumeModal } from './components/ResumeModal';
 import { BlogModal } from './components/BlogModal';
 import { CertModal } from './components/CertModal';
 import { GalleryModal } from './components/GalleryModal';
 
-import { usePortfolio } from './context/PortfolioContext';
+// Admin System
+import ProtectedRoute from './admin/ProtectedRoute';
+import AdminLayout from './admin/AdminLayout';
+import AdminLogin from './admin/AdminLogin';
+
+// Admin Section Editors
+import DashboardOverview from './admin/pages/DashboardOverview';
+import PersonalEditor from './admin/pages/PersonalEditor';
+import StatsEditor from './admin/pages/StatsEditor';
+import SkillsEditor from './admin/pages/SkillsEditor';
+import ProjectsEditor from './admin/pages/ProjectsEditor';
+import EducationEditor from './admin/pages/EducationEditor';
+import ExperienceEditor from './admin/pages/ExperienceEditor';
+import InternshipsEditor from './admin/pages/InternshipsEditor';
+import CertificationsEditor from './admin/pages/CertificationsEditor';
+import AchievementsEditor from './admin/pages/AchievementsEditor';
+import IdeasEditor from './admin/pages/IdeasEditor';
+import ServicesEditor from './admin/pages/ServicesEditor';
+import BlogEditor from './admin/pages/BlogEditor';
+import GalleryEditor from './admin/pages/GalleryEditor';
+import SocialEditor from './admin/pages/SocialEditor';
+import CTAEditor from './admin/pages/CTAEditor';
+import ResumeEditor from './admin/pages/ResumeEditor';
 
 export const PortfolioContent = () => {
   const { data } = usePortfolio();
@@ -91,7 +116,7 @@ export const PortfolioContent = () => {
               {name} • BCA SOFTWARE ENGINEER
             </span>
             <p className="text-zinc-500 mt-1">
-              Built with React, Tailwind CSS & High-Contrast Design. All content fully editable.
+              Built with React, Tailwind CSS & High-Contrast Design. All content managed via secure Admin CMS.
             </p>
           </div>
           <p className="text-zinc-400 uppercase">
@@ -100,11 +125,8 @@ export const PortfolioContent = () => {
         </div>
       </footer>
 
-      {/* Interactive Controls & Modals */}
+      {/* Interactive Controls & Viewer Modals */}
       <ThemeSwitcher />
-      <AdminAuthModal />
-      <AdminCMSModal />
-      <ImageCropperModal />
       <ResumeModal />
       <BlogModal />
       <CertModal />
@@ -115,8 +137,47 @@ export const PortfolioContent = () => {
 
 export default function App() {
   return (
-    <PortfolioProvider>
-      <PortfolioContent />
-    </PortfolioProvider>
+    <AuthProvider>
+      <PortfolioProvider>
+        <Routes>
+          {/* Public Portfolio Route */}
+          <Route path="/" element={<PortfolioContent />} />
+
+          {/* Admin Login Route */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+
+          {/* Protected Admin Dashboard Routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<DashboardOverview />} />
+            <Route path="personal" element={<PersonalEditor />} />
+            <Route path="stats" element={<StatsEditor />} />
+            <Route path="skills" element={<SkillsEditor />} />
+            <Route path="projects" element={<ProjectsEditor />} />
+            <Route path="education" element={<EducationEditor />} />
+            <Route path="experience" element={<ExperienceEditor />} />
+            <Route path="internships" element={<InternshipsEditor />} />
+            <Route path="certifications" element={<CertificationsEditor />} />
+            <Route path="achievements" element={<AchievementsEditor />} />
+            <Route path="ideas" element={<IdeasEditor />} />
+            <Route path="services" element={<ServicesEditor />} />
+            <Route path="blog" element={<BlogEditor />} />
+            <Route path="gallery" element={<GalleryEditor />} />
+            <Route path="social" element={<SocialEditor />} />
+            <Route path="cta" element={<CTAEditor />} />
+            <Route path="resume" element={<ResumeEditor />} />
+          </Route>
+
+          {/* Catch-all redirect to public portfolio */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </PortfolioProvider>
+    </AuthProvider>
   );
 }

@@ -11,13 +11,12 @@ import {
   Sparkles,
   Code2,
   Award,
-  Layers,
-  Edit2
+  Layers
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Internships = () => {
-  const { data, isAdminMode, openAdminTab } = usePortfolio();
+  const { data } = usePortfolio();
   const internships = data?.internships || [];
   const [activeFilter, setActiveFilter] = useState('ALL');
 
@@ -53,15 +52,6 @@ export const Internships = () => {
           </div>
 
           <div className="mt-6 md:mt-0 flex flex-col md:items-end gap-3">
-            {isAdminMode && (
-              <button
-                onClick={() => openAdminTab?.('internships')}
-                className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFD700] cursor-pointer"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>MANAGE INTERNSHIPS</span>
-              </button>
-            )}
             <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm uppercase text-left md:text-right">
               Hands-on industry internships, corporate training & startup software engineering roles.
             </p>
@@ -160,16 +150,6 @@ export const Internships = () => {
                           <span>VERIFY CERTIFICATE</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
-                      )}
-
-                      {isAdminMode && (
-                        <button
-                          onClick={() => openAdminTab?.('internships')}
-                          className="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-yellow-400 bg-zinc-800 border border-yellow-400/40 hover:bg-yellow-400 hover:text-black px-2 py-0.5 transition-colors cursor-pointer mt-1"
-                        >
-                          <Edit2 className="w-3 h-3" />
-                          <span>EDIT ROLE</span>
-                        </button>
                       )}
                     </div>
                   </div>

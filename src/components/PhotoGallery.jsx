@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Image as ImageIcon, Eye, Tag, Maximize2, X, Instagram, ExternalLink, Edit2 } from 'lucide-react';
+import { Image as ImageIcon, Eye, Tag, Maximize2, X, Instagram, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const PhotoGallery = () => {
-  const { data, setGalleryModalData, isAdminMode, openAdminTab } = usePortfolio();
+  const { data, setGalleryModalData } = usePortfolio();
   const { gallery, social } = data;
   const [selectedCat, setSelectedCat] = useState('All');
 
@@ -31,15 +31,6 @@ export const PhotoGallery = () => {
 
           {/* Categories Filter & Instagram Action */}
           <div className="flex flex-wrap items-center gap-2 mt-4 lg:mt-0">
-            {isAdminMode && (
-              <button
-                onClick={() => openAdminTab?.('gallery')}
-                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-3.5 py-2 font-mono text-xs font-bold uppercase flex items-center gap-2 transition-colors cursor-pointer"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>UPLOAD / EDIT PHOTOS</span>
-              </button>
-            )}
 
             {social?.instagram && (
               <a

@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Rocket, AlertTriangle, Lightbulb, Compass, Target, ArrowRight, Layers, Edit2 } from 'lucide-react';
+import { Rocket, AlertTriangle, Lightbulb, Compass, Target, ArrowRight, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const StartupIdeas = () => {
-  const { data, isAdminMode, openAdminTab } = usePortfolio();
+  const { data } = usePortfolio();
   const { startupIdeas } = data;
 
   return (
@@ -22,15 +22,6 @@ export const StartupIdeas = () => {
             </h2>
           </div>
           <div className="flex flex-col lg:items-end gap-3 mt-4 lg:mt-0">
-            {isAdminMode && (
-              <button
-                onClick={() => openAdminTab?.('ideas')}
-                className="inline-flex items-center gap-2 bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black transition-all shadow-[4px_4px_0px_#000] cursor-pointer"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>EDIT STARTUP IDEAS</span>
-              </button>
-            )}
             <p className="font-mono text-xs font-bold text-black/90 max-w-md uppercase text-left lg:text-right">
               Ventures, product concepts & SaaS startup models I am actively researching and prototyping.
             </p>

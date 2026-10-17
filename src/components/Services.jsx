@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Layout, Server, Cpu, Sparkles, ArrowRight, Edit2 } from 'lucide-react';
+import { Layout, Server, Cpu, Sparkles, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Services = () => {
-  const { data, isAdminMode, openAdminTab } = usePortfolio();
+  const { data } = usePortfolio();
   const { services } = data;
 
   const serviceIcons = [Layout, Server, Cpu, Sparkles];
@@ -24,15 +24,6 @@ export const Services = () => {
             </h2>
           </div>
           <div className="flex flex-col md:items-end gap-3 mt-4 md:mt-0">
-            {isAdminMode && (
-              <button
-                onClick={() => openAdminTab?.('services')}
-                className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFD700] cursor-pointer"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>EDIT SERVICES</span>
-              </button>
-            )}
             <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm uppercase text-left md:text-right">
               Technical solutions for clients, startups & academic teams.
             </p>

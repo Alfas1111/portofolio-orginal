@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Trophy, Medal, Star, Calendar, Users, Flame, Edit2 } from 'lucide-react';
+import { Trophy, Medal, Star, Calendar, Users, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Achievements = () => {
-  const { data, isAdminMode, openAdminTab } = usePortfolio();
+  const { data } = usePortfolio();
   const { achievements } = data;
 
   return (
@@ -22,15 +22,6 @@ export const Achievements = () => {
             </h2>
           </div>
           <div className="flex flex-col md:items-end gap-3 mt-4 md:mt-0">
-            {isAdminMode && (
-              <button
-                onClick={() => openAdminTab?.('achievements')}
-                className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFD700] cursor-pointer"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>EDIT ACHIEVEMENTS</span>
-              </button>
-            )}
             <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm uppercase text-left md:text-right">
               Hackathons, competitions, academic ranks & leadership.
             </p>

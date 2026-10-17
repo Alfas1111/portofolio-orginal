@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Code, Terminal, Globe, Database, Cloud, Layers, CheckCircle2, Cpu, Edit2 } from 'lucide-react';
+import { Code, Terminal, Globe, Database, Cloud, Layers, CheckCircle2, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Skills = () => {
-  const { data, isAdminMode, openAdminTab } = usePortfolio();
+  const { data } = usePortfolio();
   const { skills } = data;
 
   const categoryIcons = {
@@ -42,17 +42,8 @@ export const Skills = () => {
             </h2>
           </div>
           <div className="flex flex-col md:items-end gap-3 mt-4 md:mt-0">
-            {isAdminMode && (
-              <button
-                onClick={() => openAdminTab?.('skills')}
-                className="inline-flex items-center gap-2 bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black transition-all shadow-[4px_4px_0px_#000] cursor-pointer"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>EDIT SKILLS STACK</span>
-              </button>
-            )}
             <p className="font-mono text-xs font-bold text-black/80 max-w-sm uppercase text-left md:text-right">
-              Categorized technical capabilities & developer tools. Fully editable.
+              Categorized technical capabilities & developer tools.
             </p>
           </div>
         </div>

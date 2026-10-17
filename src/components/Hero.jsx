@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { ArrowDownRight, FileText, Camera, Edit3, Sparkles, Code2, Cpu, Download, Eye } from 'lucide-react';
+import { ArrowDownRight, FileText, Sparkles, Code2, Cpu, Download, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Hero = () => {
-  const { data, setIsCropperOpen, setResumeModalOpen, downloadResume, isAdminMode } = usePortfolio();
+  const { data, setResumeModalOpen, downloadResume } = usePortfolio();
   const { personal } = data;
 
   const imgStyle = personal.imagePosition
@@ -137,18 +137,6 @@ export const Hero = () => {
                     BCA CANDIDATE • 2023 - 2026
                   </p>
                 </div>
-
-                {/* Edit Photo Trigger Button (Admin Only) */}
-                {isAdminMode && (
-                  <button
-                    onClick={() => setIsCropperOpen(true)}
-                    className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-black text-yellow-400 p-2 sm:p-3 border-2 border-black shadow-[3px_3px_0px_#fff] sm:shadow-[4px_4px_0px_#fff] opacity-95 hover:opacity-100 hover:scale-105 transition-all flex items-center gap-2 font-mono text-[11px] sm:text-xs font-bold cursor-pointer"
-                    title="Upload, Crop & Adjust Profile Photo"
-                  >
-                    <Camera className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>EDIT PHOTO</span>
-                  </button>
-                )}
               </div>
 
               {/* Decorative Corner Labels */}

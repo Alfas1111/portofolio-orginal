@@ -1,9 +1,9 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { X, ExternalLink, Award, Download, Edit2, FileText, CheckCircle } from 'lucide-react';
+import { X, ExternalLink, Award, Download, FileText } from 'lucide-react';
 
 export const CertModal = () => {
-  const { certModalData, setCertModalData, openAdminTab, isAdminMode } = usePortfolio();
+  const { certModalData, setCertModalData } = usePortfolio();
 
   if (!certModalData) return null;
 
@@ -12,11 +12,6 @@ export const CertModal = () => {
     certModalData.fileType === 'pdf';
 
   const hasFile = Boolean(certModalData.image);
-
-  const handleEditClick = () => {
-    setCertModalData(null);
-    openAdminTab('certifications');
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md">
@@ -38,16 +33,6 @@ export const CertModal = () => {
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            {isAdminMode && (
-              <button
-                onClick={handleEditClick}
-                className="p-1.5 bg-zinc-900 border border-zinc-700 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors text-xs font-mono font-bold flex items-center gap-1 cursor-pointer"
-                title="Edit this certificate in CMS"
-              >
-                <Edit2 className="w-4 h-4" />
-                <span className="hidden sm:inline">EDIT</span>
-              </button>
-            )}
             <button
               onClick={() => setCertModalData(null)}
               className="p-1.5 bg-zinc-800 text-zinc-300 hover:bg-yellow-400 hover:text-black transition-colors"
@@ -94,14 +79,7 @@ export const CertModal = () => {
         ) : (
           <div className="py-16 text-center border-2 border-dashed border-zinc-800 bg-zinc-950 space-y-3 font-mono text-xs text-zinc-400">
             <Award className="w-12 h-12 text-zinc-600 mx-auto" />
-            <p className="font-bold text-zinc-300">NO CERTIFICATE FILE HAS BEEN UPLOADED YET.</p>
-            <button
-              onClick={handleEditClick}
-              className="brutal-btn bg-yellow-400 text-black px-4 py-2 font-bold inline-flex items-center gap-1.5"
-            >
-              <Award className="w-4 h-4" />
-              <span>UPLOAD YOUR CERTIFICATE NOW</span>
-            </button>
+            <p className="font-bold text-zinc-300">NO CERTIFICATE FILE HAS BEEN ATTACHED.</p>
           </div>
         )}
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Award, ExternalLink, Calendar, ShieldCheck, Eye, Plus, FileText, Upload, Edit2 } from 'lucide-react';
+import { Award, ExternalLink, Calendar, ShieldCheck, Eye, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Certifications = () => {
-  const { data, setCertModalData, openAdminTab, isAdminMode } = usePortfolio();
+  const { data, setCertModalData } = usePortfolio();
   const certifications = data?.certifications || [];
 
   return (
@@ -25,16 +25,6 @@ export const Certifications = () => {
             <p className="font-mono text-xs font-bold text-black/80 max-w-xs uppercase">
               Industry recognized cloud & developer certifications.
             </p>
-            {isAdminMode && (
-              <button
-                onClick={() => openAdminTab('certifications')}
-                className="brutal-btn bg-black text-yellow-400 hover:bg-white hover:text-black px-4 py-2.5 text-xs font-extrabold flex items-center gap-2 shadow-[4px_4px_0px_#000] shrink-0"
-                title="Upload your own certificates or edit credentials"
-              >
-                <Upload className="w-4 h-4" />
-                <span>UPLOAD / EDIT CERTIFICATES</span>
-              </button>
-            )}
           </div>
         </div>
 
@@ -74,15 +64,6 @@ export const Certifications = () => {
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        {isAdminMode && (
-                          <button
-                            onClick={() => openAdminTab('certifications')}
-                            className="p-1 bg-zinc-800 text-zinc-400 hover:text-yellow-400 hover:bg-black transition-colors"
-                            title="Edit Certificate"
-                          >
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
-                        )}
                         {cert.date && (
                           <span className="bg-yellow-400 text-black font-mono text-xs font-bold px-2.5 py-1 border border-black shrink-0">
                             {cert.date}
@@ -169,19 +150,9 @@ export const Certifications = () => {
             <p className="font-mono text-xs text-zinc-400 max-w-md mx-auto">
               Upload your cloud certifications, course badges, and academic credentials here.
             </p>
-            {isAdminMode ? (
-              <button
-                onClick={() => openAdminTab('certifications')}
-                className="brutal-btn bg-yellow-400 text-black px-6 py-3 font-bold text-xs inline-flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                <span>UPLOAD YOUR OWN CERTIFICATE NOW</span>
-              </button>
-            ) : (
-              <span className="font-mono text-xs text-yellow-400 font-bold block pt-2">
-                // CREDENTIALS BEING UPDATED
-              </span>
-            )}
+            <span className="font-mono text-xs text-yellow-400 font-bold block pt-2">
+              // CREDENTIALS BEING UPDATED
+            </span>
           </div>
         )}
 

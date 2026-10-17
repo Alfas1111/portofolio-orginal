@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Mail, MapPin, Linkedin, Github, Instagram, Facebook, Twitter, Send, ArrowRight, Sparkles, CheckCircle2, MessageSquare, Flame, Edit2 } from 'lucide-react';
+import { Mail, MapPin, Linkedin, Github, Instagram, Facebook, Twitter, Send, ArrowRight, Sparkles, CheckCircle2, MessageSquare, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
 export const ContactAndCTA = () => {
-  const { data, isAdminMode, openAdminTab } = usePortfolio();
+  const { data } = usePortfolio();
   const { social, personal, ctaSection } = data;
 
   const [formState, setFormState] = useState({ name: '', email: '', subject: '', message: '' });
@@ -58,16 +58,6 @@ export const ContactAndCTA = () => {
                 <Flame className="w-4 h-4 text-black animate-bounce shrink-0" />
                 <span>STARTUP & FOUNDER COLLABORATION</span>
               </div>
-              {isAdminMode && (
-                <button
-                  onClick={() => openAdminTab?.('cta')}
-                  className="inline-flex items-center gap-2 bg-yellow-400 text-black px-3.5 py-1.5 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFF] cursor-pointer"
-                  title="Edit Startup CTA section content"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                  <span>EDIT CTA</span>
-                </button>
-              )}
             </div>
 
             <h2 className="font-display text-3xl sm:text-6xl xl:text-7xl font-extrabold uppercase leading-[0.98] sm:leading-[0.95] tracking-tighter text-yellow-400">
@@ -145,16 +135,6 @@ export const ContactAndCTA = () => {
               </h2>
             </div>
             <div className="flex flex-col md:items-end gap-3 mt-4 md:mt-0">
-              {isAdminMode && (
-                <button
-                  onClick={() => openAdminTab?.('social')}
-                  className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 font-mono text-xs font-extrabold border-2 border-black hover:bg-white transition-all shadow-[3px_3px_0px_#FFD700] cursor-pointer"
-                  title="Edit contact email and social profiles"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                  <span>EDIT SOCIAL & CONTACT</span>
-                </button>
-              )}
               <p className="font-mono text-xs font-bold text-zinc-400 max-w-sm uppercase text-left md:text-right">
                 Send a direct message or connect across developer platforms.
               </p>
