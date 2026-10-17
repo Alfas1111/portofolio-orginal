@@ -116,7 +116,7 @@ export const PortfolioContent = () => {
               {name} • BCA SOFTWARE ENGINEER
             </span>
             <p className="text-zinc-500 mt-1">
-              Built with React, Tailwind CSS & High-Contrast Design. All content managed via secure Admin CMS.
+              Built with React, Tailwind CSS & High-Contrast Design.
             </p>
           </div>
           <p className="text-zinc-400 uppercase">

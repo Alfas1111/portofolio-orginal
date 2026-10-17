@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Palette, Check, X, Settings } from 'lucide-react';
+import { Palette, Check, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ThemeSwitcher = () => {
-  const { theme, setTheme, setIsAdminOpen } = usePortfolio();
+  const { theme, setTheme } = usePortfolio();
   const [isOpen, setIsOpen] = useState(false);
 
   const themes = [
@@ -52,16 +52,6 @@ export const ThemeSwitcher = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2">
-      {/* Floating CMS Edit Button */}
-      <button
-        onClick={() => setIsAdminOpen(true)}
-        className="brutal-btn bg-yellow-400 text-black hover:bg-white p-3 sm:px-4 sm:py-3.5 flex items-center gap-2 text-xs font-mono font-bold shadow-[4px_4px_0px_#000] border-2 border-black transition-all"
-        title="Open CMS to edit portfolio content"
-      >
-        <Settings className="w-4 h-4" />
-        <span className="hidden sm:inline">EDIT PORTFOLIO</span>
-      </button>
-
       {/* Floating Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
