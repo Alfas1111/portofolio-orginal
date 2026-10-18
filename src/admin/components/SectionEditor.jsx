@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { fetchSectionContent, saveSectionContent, togglePublishStatus } from '../../lib/database';
 import { initialPortfolioData } from '../../data/initialData';
 import { isSupabaseConfigured } from '../../lib/supabase';
+import { usePortfolio } from '../../context/PortfolioContext';
 import {
   Save, Eye, EyeOff, CheckCircle, AlertCircle, Loader2, RotateCcw, ArrowLeft
 } from 'lucide-react';
@@ -18,6 +19,7 @@ import { Link } from 'react-router-dom';
  * - children: function(content, setContent) => JSX — the form fields
  */
 const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
+  const { updateData } = usePortfolio();
   const [content, setContent] = useState(null);
   const [isPublished, setIsPublished] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -41,7 +43,18 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
             setContent(fallback || {});
           }
         } else {
-          // No Supabase — use initial data
+          // Check localStorage first
+          const stored = localStorage.getItem('bca_portfolio_data_v2');
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored);
+              if (parsed[sectionKey] !== undefined) {
+                setContent(parsed[sectionKey]);
+                setLoading(false);
+                return;
+              }
+            } catch (e) {}
+          }
           const fallback = initialPortfolioData[sectionKey];
           setContent(fallback || {});
         }
@@ -69,6 +82,10 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
 
   // Save content to database
   const handleSave = async (publish = isPublished) => {
+    if (updateData) {
+      updateData({ [sectionKey]: content });
+    }
+
     if (!isSupabaseConfigured) {
       try {
         const stored = localStorage.getItem('bca_portfolio_data_v2');
@@ -79,7 +96,7 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
         setHasChanges(false);
         setMessage({
           type: 'success',
-          text: publish ? 'Saved locally! (Connect Supabase in .env to sync with cloud)' : 'Saved as draft locally.'
+          text: publish ? 'Saved and published! Changes are active immediately.' : 'Saved as draft locally.'
         });
       } catch (e) {
         setMessage({ type: 'error', text: 'Failed to save locally.' });
