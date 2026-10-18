@@ -3,15 +3,14 @@ import SectionEditor from '../components/SectionEditor';
 import { FileText, Upload, Download, ExternalLink, CheckCircle, AlertTriangle, X } from 'lucide-react';
 import { compressAndReadFile } from '../../utils/fileHelpers';
 
-const ResumeEditor = () => (
-  <SectionEditor sectionKey="personal" title="Resume / CV Document" icon={FileText}>
-    {(content, setContent) => {
-      if (!content) return null;
-      const [uploading, setUploading] = useState(false);
-      const [uploadError, setUploadError] = useState(null);
-      const [showUrlInput, setShowUrlInput] = useState(false);
+const ResumeForm = ({ content, setContent }) => {
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
+  const [showUrlInput, setShowUrlInput] = useState(false);
 
-      const update = (f, v) => setContent((prev) => ({ ...prev, [f]: v }));
+  if (!content) return null;
+
+  const update = (f, v) => setContent((prev) => ({ ...prev, [f]: v }));
 
       const handleFileUpload = async (e) => {
         const file = e.target.files?.[0];
@@ -176,8 +175,12 @@ const ResumeEditor = () => (
             </div>
           </div>
         </div>
-      );
-    }}
+  );
+};
+
+const ResumeEditor = () => (
+  <SectionEditor sectionKey="personal" title="Resume / CV Document" icon={FileText}>
+    {(content, setContent) => <ResumeForm content={content} setContent={setContent} />}
   </SectionEditor>
 );
 

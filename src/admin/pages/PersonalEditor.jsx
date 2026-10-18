@@ -19,16 +19,13 @@ import { compressAndReadFile } from '../../utils/fileHelpers';
 
 const DEFAULT_PROFILE_IMAGE = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop";
 
-const PersonalEditor = () => {
-  return (
-    <SectionEditor sectionKey="personal" title="Personal Information & Profile Photo" icon={User}>
-      {(content, setContent) => {
-        if (!content) return null;
+const PersonalForm = ({ content, setContent }) => {
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [showPositionControls, setShowPositionControls] = useState(true);
 
-        const [uploading, setUploading] = useState(false);
-        const [uploadError, setUploadError] = useState(null);
-        const [showUrlInput, setShowUrlInput] = useState(false);
-        const [showPositionControls, setShowPositionControls] = useState(true);
+  if (!content) return null;
 
         const imgPos = content.imagePosition || { zoom: 1, x: 0, y: 0, rotate: 0 };
 
@@ -496,10 +493,13 @@ const PersonalEditor = () => {
               </div>
             </div>
           </div>
-        );
-      }}
-    </SectionEditor>
   );
 };
+
+const PersonalEditor = () => (
+  <SectionEditor sectionKey="personal" title="Personal Information & Profile Photo" icon={User}>
+    {(content, setContent) => <PersonalForm content={content} setContent={setContent} />}
+  </SectionEditor>
+);
 
 export default PersonalEditor;
