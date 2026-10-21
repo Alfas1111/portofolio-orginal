@@ -8,7 +8,8 @@ import {
   LayoutDashboard, User, Code, FolderGit2, GraduationCap, Briefcase,
   Award, Trophy, Rocket, Wrench, BookOpen, Image as ImageIcon, Share2,
   MessageSquare, BarChart3, Database, CheckCircle, XCircle, Upload,
-  AlertTriangle, ExternalLink, FileText, ChevronRight
+  AlertTriangle, ExternalLink, FileText, ChevronRight,
+  Download, Copy, Smartphone, HelpCircle, Check, ArrowRight
 } from 'lucide-react';
 
 const sectionMeta = {
@@ -35,6 +36,93 @@ const DashboardOverview = () => {
   const [loading, setLoading] = useState(true);
   const [seeding, setSeeding] = useState(false);
   const [seedMessage, setSeedMessage] = useState('');
+  const [copyMessage, setCopyMessage] = useState('');
+  const [showCloudGuide, setShowCloudGuide] = useState(false);
+  const [hasLocalEdits, setHasLocalEdits] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('bca_portfolio_data_v2');
+      if (stored) {
+        setHasLocalEdits(true);
+      }
+    } catch (e) {}
+  }, []);
+
+  const getCurrentPortfolioData = () => {
+    try {
+      const stored = localStorage.getItem('bca_portfolio_data_v2');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return {
+          ...initialPortfolioData,
+          ...parsed,
+          personal: { ...initialPortfolioData.personal, ...(parsed.personal || {}) },
+          social: { ...initialPortfolioData.social, ...(parsed.social || {}) }
+        };
+      }
+    } catch (e) {}
+    return initialPortfolioData;
+  };
+
+  const handleDownloadInitialData = () => {
+    const fullData = getCurrentPortfolioData();
+    const fileContent = `export const initialPortfolioData = ${JSON.stringify(fullData, null, 2)};\n`;
+    const blob = new Blob([fileContent], { type: 'text/javascript' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'initialData.js';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setCopyMessage('Downloaded initialData.js! Replace src/data/initialData.js with this file and git push to update mobile & all visitors.');
+  };
+
+  const handleCopyInitialData = async () => {
+    const fullData = getCurrentPortfolioData();
+    const fileContent = `export const initialPortfolioData = ${JSON.stringify(fullData, null, 2)};\n`;
+    try {
+      await navigator.clipboard.writeText(fileContent);
+      setCopyMessage('Copied to clipboard! Paste into src/data/initialData.js and git push to update mobile & all visitors.');
+      setTimeout(() => setCopyMessage(''), 6000);
+    } catch (err) {
+      setCopyMessage('Failed to copy to clipboard.');
+    }
+  };
+
+  const handleExportJSON = () => {
+    const fullData = getCurrentPortfolioData();
+    const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `portfolio_backup_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportJSON = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const parsed = JSON.parse(event.target?.result);
+        localStorage.setItem('bca_portfolio_data_v2', JSON.stringify(parsed));
+        setHasLocalEdits(true);
+        setCopyMessage('Imported successfully! Reloading to apply changes...');
+        setTimeout(() => window.location.reload(), 1200);
+      } catch (err) {
+        setCopyMessage('Invalid JSON backup file.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
 
   const loadContent = async () => {
     if (!isSupabaseConfigured) {
@@ -97,15 +185,127 @@ const DashboardOverview = () => {
         </p>
       </div>
 
-      {/* Supabase not configured warning */}
+      {/* Cross-Device Sync & Export Notification Banner */}
       {!isSupabaseConfigured && (
-        <div className="p-5 bg-amber-950/50 border-2 border-amber-500 flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-          <div>
-            <p className="font-heading text-sm font-bold text-amber-300 uppercase">Database Not Connected</p>
-            <p className="font-sans text-xs text-amber-300/80 mt-1">
-              Configure your Supabase environment variables to enable database storage. Until then, the portfolio displays data from the local template file.
+        <div className="bg-zinc-900 border-4 border-yellow-400 p-5 sm:p-6 shadow-[8px_8px_0px_#FFD700] space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-zinc-800 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-yellow-400 text-black border-2 border-black">
+                <Smartphone className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="font-mono text-[10px] text-yellow-400 font-bold uppercase tracking-wider block">
+                  // DESKTOP VS MOBILE SYNC STATUS
+                </span>
+                <h2 className="font-display text-lg sm:text-xl font-extrabold text-white uppercase tracking-tight">
+                  LOCAL STORAGE MODE: <span className="text-yellow-400">WHY MOBILE DOESN'T UPDATE</span>
+                </h2>
+              </div>
+            </div>
+            {hasLocalEdits && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-950/80 border border-green-500 text-green-400 font-mono text-xs font-bold uppercase self-start sm:self-auto">
+                <Check className="w-3.5 h-3.5" />
+                Edits saved in this browser
+              </span>
+            )}
+          </div>
+
+          <p className="font-sans text-xs sm:text-sm text-zinc-300 leading-relaxed">
+            You updated a section on desktop, but your mobile phone still shows the original content. This happens because <strong>Supabase cloud database is not connected</strong>. Your edits are currently saved only inside this desktop browser's local storage. When you open the same link on your phone, mobile has its own isolated storage and falls back to default data.
+          </p>
+
+          {/* Quick Action Buttons */}
+          <div className="bg-black/60 border-2 border-zinc-800 p-4 space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <span className="font-mono text-xs font-bold text-white uppercase flex items-center gap-2">
+                <span className="w-2 h-2 bg-yellow-400 inline-block" />
+                METHOD 1: EXPORT EDITS TO YOUR CODE (RECOMMENDED • ZERO SETUP)
+              </span>
+              <span className="font-mono text-[11px] text-zinc-400">
+                Replace <code>src/data/initialData.js</code> & git push
+              </span>
+            </div>
+
+            <p className="font-sans text-xs text-zinc-400">
+              Download your current updated data as <code>initialData.js</code>, replace the file in your repository, and commit/push to Vercel. Both mobile and desktop will display your new content permanently!
             </p>
+
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <button
+                onClick={handleDownloadInitialData}
+                className="brutal-btn bg-yellow-400 text-black hover:bg-white px-4 py-2 font-mono text-xs font-extrabold flex items-center gap-2 cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+                <span>DOWNLOAD INITIALDATA.JS</span>
+              </button>
+
+              <button
+                onClick={handleCopyInitialData}
+                className="brutal-btn bg-zinc-800 text-zinc-200 hover:text-white hover:bg-zinc-700 px-4 py-2 font-mono text-xs font-bold flex items-center gap-2 cursor-pointer border border-zinc-700"
+              >
+                <Copy className="w-4 h-4" />
+                <span>COPY INITIALDATA.JS CODE</span>
+              </button>
+
+              <button
+                onClick={handleExportJSON}
+                className="px-3 py-2 bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 font-mono text-xs font-bold flex items-center gap-1.5 border border-zinc-800 cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>EXPORT JSON</span>
+              </button>
+
+              <label className="px-3 py-2 bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 font-mono text-xs font-bold flex items-center gap-1.5 border border-zinc-800 cursor-pointer">
+                <Upload className="w-3.5 h-3.5" />
+                <span>IMPORT JSON</span>
+                <input type="file" accept=".json" onChange={handleImportJSON} className="hidden" />
+              </label>
+            </div>
+
+            {copyMessage && (
+              <div className="p-2.5 bg-yellow-400/10 border border-yellow-400/40 text-yellow-400 font-mono text-xs font-bold flex items-center gap-2">
+                <Check className="w-4 h-4 shrink-0" />
+                <span>{copyMessage}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Cloud Database Guide Toggle */}
+          <div className="pt-1">
+            <button
+              onClick={() => setShowCloudGuide(!showCloudGuide)}
+              className="text-zinc-400 hover:text-yellow-400 font-mono text-xs font-bold uppercase flex items-center gap-2 cursor-pointer transition-colors"
+            >
+              <HelpCircle className="w-4 h-4 text-yellow-400" />
+              <span>{showCloudGuide ? 'HIDE' : 'OR METHOD 2: CONNECT SUPABASE FOR AUTOMATIC REAL-TIME CLOUD SYNC'}</span>
+              <ChevronRight className={`w-3.5 h-3.5 transition-transform ${showCloudGuide ? 'rotate-90' : ''}`} />
+            </button>
+
+            {showCloudGuide && (
+              <div className="mt-3 p-4 bg-black/80 border-2 border-zinc-800 font-sans text-xs text-zinc-300 space-y-3">
+                <p className="font-heading font-bold text-white uppercase text-sm">
+                  How to enable live cross-device cloud sync:
+                </p>
+                <ol className="list-decimal list-inside space-y-2 font-mono text-xs text-zinc-300">
+                  <li>
+                    Create a free project at <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-yellow-400 underline">supabase.com</a>.
+                  </li>
+                  <li>
+                    In Supabase Dashboard, go to <strong>SQL Editor</strong> &gt; <strong>New Query</strong>, paste the content of <code>supabase/schema.sql</code>, and click <strong>Run</strong>.
+                  </li>
+                  <li>
+                    In your <strong>Vercel Project Settings</strong> (or local <code>.env</code> file), add these two environment variables:
+                    <div className="mt-1 p-2 bg-zinc-900 border border-zinc-700 text-yellow-300 select-all font-mono text-[11px]">
+                      VITE_SUPABASE_URL=https://your-project.supabase.co<br />
+                      VITE_SUPABASE_ANON_KEY=your-anon-key
+                    </div>
+                  </li>
+                  <li>
+                    Redeploy on Vercel. Now every edit in this Admin dashboard saves straight to the cloud and updates mobile devices instantly in real-time!
+                  </li>
+                </ol>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -4,7 +4,8 @@ import { initialPortfolioData } from '../../data/initialData';
 import { isSupabaseConfigured } from '../../lib/supabase';
 import { usePortfolio } from '../../context/PortfolioContext';
 import {
-  Save, Eye, EyeOff, CheckCircle, AlertCircle, Loader2, RotateCcw, ArrowLeft
+  Save, Eye, EyeOff, CheckCircle, AlertCircle, Loader2, RotateCcw, ArrowLeft,
+  AlertTriangle, Smartphone
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -96,7 +97,9 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
         setHasChanges(false);
         setMessage({
           type: 'success',
-          text: publish ? 'Saved and published! Changes are active immediately.' : 'Saved as draft locally.'
+          text: publish
+            ? 'Saved to this browser (local storage). Note: To make changes visible on mobile and to all visitors, connect Supabase or export to initialData.js from the Dashboard!'
+            : 'Saved as draft locally in this browser.'
         });
       } catch (e) {
         setMessage({ type: 'error', text: 'Failed to save locally.' });
@@ -228,6 +231,25 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
             <AlertCircle className="w-4 h-4 shrink-0" />
           )}
           <span>{message.text}</span>
+        </div>
+      )}
+
+      {/* Supabase Not Configured Notice */}
+      {!isSupabaseConfigured && (
+        <div className="p-3 bg-amber-950/40 border border-amber-500/50 flex items-center justify-between gap-3 text-amber-300 font-mono text-xs">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+            <span>
+              <strong>Local Mode:</strong> Changes are saved only to this desktop browser. To sync to your mobile phone and all visitors, export to code or connect Supabase.
+            </span>
+          </div>
+          <Link
+            to="/admin"
+            className="shrink-0 underline hover:text-white flex items-center gap-1 font-bold text-[11px]"
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span>Sync Guide</span>
+          </Link>
         </div>
       )}
 
