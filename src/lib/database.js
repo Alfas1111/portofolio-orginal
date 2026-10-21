@@ -225,16 +225,6 @@ export const seedInitialData = async (initialData) => {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
 
-  // Check if data already exists
-  const { data: existing } = await supabase
-    .from('portfolio_content')
-    .select('section')
-    .limit(1);
-
-  if (existing && existing.length > 0) {
-    return { seeded: false, message: 'Data already exists in database.' };
-  }
-
   // Map initialData sections to rows
   const sections = [
     { section: 'personal', content: initialData.personal },
@@ -257,17 +247,18 @@ export const seedInitialData = async (initialData) => {
   const rows = sections.map((s) => ({
     ...s,
     is_published: true,
+    updated_at: new Date().toISOString(),
     updated_by: user.id
   }));
 
   const { error } = await supabase
     .from('portfolio_content')
-    .insert(rows);
+    .upsert(rows, { onConflict: 'section' });
 
   if (error) {
     console.error('Seed error:', error);
     throw error;
   }
 
-  return { seeded: true, message: `Seeded ${rows.length} sections successfully.` };
+  return { seeded: true, message: `Successfully seeded/synced ${rows.length} sections to database.` };
 };

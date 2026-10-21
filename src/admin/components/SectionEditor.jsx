@@ -71,6 +71,18 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
     loadData();
   }, [sectionKey]);
 
+  // Warn user before leaving page if there are unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (hasChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasChanges]);
+
   // Wrapper for setContent that also marks changes
   const updateContent = useCallback((updater) => {
     setContent((prev) => {
@@ -83,41 +95,45 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
 
   // Save content to database
   const handleSave = async (publish = isPublished) => {
-    if (updateData) {
-      updateData({ [sectionKey]: content });
-    }
-
     if (!isSupabaseConfigured) {
       try {
         const stored = localStorage.getItem('bca_portfolio_data_v2');
         const parsed = stored ? JSON.parse(stored) : { ...initialPortfolioData };
         parsed[sectionKey] = content;
         localStorage.setItem('bca_portfolio_data_v2', JSON.stringify(parsed));
-        setIsPublished(publish);
-        setHasChanges(false);
-        setMessage({
-          type: 'success',
-          text: publish
-            ? 'Saved to this browser (local storage). Note: To make changes visible on mobile and to all visitors, connect Supabase or export to initialData.js from the Dashboard!'
-            : 'Saved as draft locally in this browser.'
-        });
-      } catch (e) {
-        setMessage({ type: 'error', text: 'Failed to save locally.' });
-      }
+        if (updateData) {
+          updateData({ [sectionKey]: content });
+        }
+      } catch (e) {}
+
+      setMessage({
+        type: 'error',
+        text: 'DATABASE NOT CONNECTED! Changes are saved locally on this device only. To sync across mobile and all devices, connect Supabase in Vercel or use Sync Tools in Dashboard.'
+      });
       return;
     }
+
     setSaving(true);
     setMessage(null);
     try {
       await saveSectionContent(sectionKey, content, publish);
+      if (updateData) {
+        updateData({ [sectionKey]: content });
+      }
       setIsPublished(publish);
       setHasChanges(false);
       setMessage({
         type: 'success',
-        text: publish ? 'Saved and published successfully!' : 'Saved as draft.'
+        text: publish
+          ? '✓ Saved to server and published! Changes are now live across all devices.'
+          : '✓ Saved as draft in database.'
       });
     } catch (err) {
-      setMessage({ type: 'error', text: `Save failed: ${err.message}` });
+      console.error('Save error:', err);
+      setMessage({
+        type: 'error',
+        text: `Server save failed: ${err.message || 'Unknown network error'}. Changes were not saved to database.`
+      });
     } finally {
       setSaving(false);
     }
@@ -130,10 +146,9 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
     if (!window.confirm(`Are you sure you want to ${action} this section?`)) return;
 
     if (!isSupabaseConfigured) {
-      setIsPublished(newStatus);
       setMessage({
-        type: 'success',
-        text: newStatus ? 'Section marked as published locally.' : 'Section marked as draft locally.'
+        type: 'error',
+        text: 'Database not connected. Cannot toggle server publish status.'
       });
       return;
     }
@@ -144,7 +159,9 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
       setIsPublished(newStatus);
       setMessage({
         type: 'success',
-        text: newStatus ? 'Section published! It is now visible on your portfolio.' : 'Section unpublished. It is now hidden from visitors.'
+        text: newStatus
+          ? '✓ Section published to database! Visible on all devices.'
+          : '✓ Section unpublished from database. Hidden from visitors.'
       });
     } catch (err) {
       setMessage({ type: 'error', text: `Failed to ${action}: ${err.message}` });
@@ -266,7 +283,7 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
           className="brutal-btn bg-yellow-400 text-black hover:bg-white px-5 py-2.5 font-mono text-xs font-extrabold flex items-center gap-2 cursor-pointer disabled:opacity-50"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          <span>{saving ? 'SAVING...' : 'SAVE & PUBLISH'}</span>
+          <span>{saving ? 'SAVING TO DATABASE...' : 'SAVE & PUBLISH'}</span>
         </button>
 
         <button

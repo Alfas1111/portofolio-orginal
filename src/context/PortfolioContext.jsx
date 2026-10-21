@@ -32,39 +32,38 @@ export const PortfolioProvider = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured);
 
+  const refreshContent = async () => {
+    if (!isSupabaseConfigured) return;
+    try {
+      const publishedMap = await fetchPublishedContent();
+      if (publishedMap && Object.keys(publishedMap).length > 0) {
+        setData((prev) => {
+          const updated = {
+            ...prev,
+            ...publishedMap,
+            personal: { ...prev.personal, ...(publishedMap.personal || {}) },
+            social: { ...prev.social, ...(publishedMap.social || {}) }
+          };
+          try {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+          } catch (err) {}
+          return updated;
+        });
+      }
+    } catch (err) {
+      console.warn('Could not load content from Supabase:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Fetch published data from Supabase backend on mount
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
-
-    let isMounted = true;
-    const loadContentFromDatabase = async () => {
-      try {
-        const publishedMap = await fetchPublishedContent();
-        if (publishedMap && Object.keys(publishedMap).length > 0 && isMounted) {
-          setData((prev) => {
-            const updated = {
-              ...prev,
-              ...publishedMap,
-              personal: { ...prev.personal, ...(publishedMap.personal || {}) },
-              social: { ...prev.social, ...(publishedMap.social || {}) }
-            };
-            try {
-              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-            } catch (err) {}
-            return updated;
-          });
-        }
-      } catch (err) {
-        console.warn('Could not load content from Supabase, using local fallback:', err);
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    };
-
-    loadContentFromDatabase();
-    return () => {
-      isMounted = false;
-    };
+    if (!isSupabaseConfigured) {
+      setIsLoading(false);
+      return;
+    }
+    refreshContent();
   }, []);
 
   const [theme, setThemeState] = useState(() => {
@@ -145,6 +144,8 @@ export const PortfolioProvider = ({ children }) => {
         setCertModalData,
         galleryModalData,
         setGalleryModalData,
+        refreshContent,
+        isSupabaseConfigured,
         // Compatibility stubs so legacy calls don't crash
         openAdminTab: () => {},
         requestAdminAccess: () => {},

@@ -96,6 +96,29 @@ BEGIN
 END;
 $$;
 
+-- 6b. Automatic trigger: when admin signs up, automatically add to admin_users
+CREATE OR REPLACE FUNCTION public.handle_new_admin_user()
+RETURNS trigger AS $$
+BEGIN
+  IF LOWER(NEW.email) = 'alfasthestarboy707@gmail.com' THEN
+    INSERT INTO public.admin_users (user_id)
+    VALUES (NEW.id)
+    ON CONFLICT (user_id) DO NOTHING;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created_admin ON auth.users;
+CREATE TRIGGER on_auth_user_created_admin
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_admin_user();
+
+-- Automatic backfill if the user already exists in auth.users
+INSERT INTO public.admin_users (user_id)
+SELECT id FROM auth.users WHERE LOWER(email) = 'alfasthestarboy707@gmail.com'
+ON CONFLICT (user_id) DO NOTHING;
+
 -- 7. Setup Storage Bucket for Assets (Certificates, Resume, Images)
 -- Note: Storage buckets can also be created via Supabase Dashboard -> Storage
 INSERT INTO storage.buckets (id, name, public)

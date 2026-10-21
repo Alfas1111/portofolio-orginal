@@ -418,6 +418,17 @@ const DashboardOverview = () => {
             <ExternalLink className="w-3.5 h-3.5" />
             <span>View Live Portfolio</span>
           </a>
+
+          {isSupabaseConfigured && (
+            <button
+              onClick={handleSeedData}
+              disabled={seeding}
+              className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black hover:bg-white font-mono text-xs font-bold uppercase border border-black transition-colors cursor-pointer disabled:opacity-50"
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span>{seeding ? 'SYNCING TO CLOUD...' : 'SYNC ALL TEMPLATE SECTIONS TO CLOUD'}</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -122,37 +122,6 @@ export const AuthProvider = ({ children }) => {
       throw err;
     }
 
-    // 1. If Supabase is configured, authenticate through Supabase Auth
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const { data, error: authError } = await supabase.auth.signInWithPassword({
-          email: cleanEmail,
-          password: cleanPassword
-        });
-
-        if (authError) throw authError;
-
-        if (data?.user) {
-          const adminStatus = await checkAdminStatus(data.user.id);
-          if (!adminStatus) {
-            await supabase.auth.signOut();
-            setUser(null);
-            setIsAdmin(false);
-            const err = new Error('Access denied. This account does not have administrator privileges.');
-            setError(err.message);
-            throw err;
-          }
-          setUser(data.user);
-          setIsAdmin(true);
-          return data;
-        }
-      } catch (err) {
-        setError(err.message);
-        throw err;
-      }
-    }
-
-    // 2. Cryptographic SHA-256 verification against your personal admin credentials
     const targetEmail = (import.meta.env.VITE_ADMIN_EMAIL || DEFAULT_ADMIN_EMAIL).toLowerCase();
     const inputHash = await hashPassword(cleanPassword);
     const envPassword = import.meta.env.VITE_ADMIN_PASSWORD;
@@ -160,31 +129,95 @@ export const AuthProvider = ({ children }) => {
     const isEmailCorrect = cleanEmail === targetEmail;
     const isPasswordCorrect = inputHash === ADMIN_PASSWORD_HASH || (envPassword && cleanPassword === envPassword.trim());
 
-    if (isEmailCorrect && isPasswordCorrect) {
-      const adminUser = {
-        email: targetEmail,
-        id: 'admin-muhammed-alfas',
-        role: 'admin'
-      };
-
-      setUser(adminUser);
-      setIsAdmin(true);
-
-      // Save encrypted session for the active browser session
-      try {
-        sessionStorage.setItem(
-          AUTH_STORAGE_KEY,
-          btoa(JSON.stringify({ email: targetEmail, isAdmin: true, time: Date.now() }))
-        );
-      } catch (e) {}
-
-      return { user: adminUser };
+    // Strictly reject non-owner credentials
+    if (!isEmailCorrect || !isPasswordCorrect) {
+      const err = new Error('Invalid email or password. Access denied.');
+      setError(err.message);
+      throw err;
     }
 
-    // Strictly reject any other credentials
-    const err = new Error('Invalid email or password. Access denied.');
-    setError(err.message);
-    throw err;
+    // 1. If Supabase is configured, authenticate through Supabase Auth
+    if (isSupabaseConfigured && supabase) {
+      try {
+        let { data, error: authError } = await supabase.auth.signInWithPassword({
+          email: cleanEmail,
+          password: cleanPassword
+        });
+
+        // If user does not exist in Supabase Auth yet, auto-provision the owner
+        if (authError && (authError.message.toLowerCase().includes('invalid login credentials') || authError.status === 400)) {
+          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            email: cleanEmail,
+            password: cleanPassword
+          });
+
+          if (!signUpError && signUpData?.user) {
+            data = signUpData;
+            authError = null;
+          }
+        }
+
+        if (data?.user) {
+          // Check/ensure admin status in admin_users table
+          let adminStatus = await checkAdminStatus(data.user.id);
+          if (!adminStatus) {
+            try {
+              await supabase.from('admin_users').upsert({ user_id: data.user.id }, { onConflict: 'user_id' });
+              adminStatus = await checkAdminStatus(data.user.id);
+            } catch (err) {}
+          }
+
+          setUser(data.user);
+          setIsAdmin(true);
+
+          try {
+            sessionStorage.setItem(
+              AUTH_STORAGE_KEY,
+              btoa(JSON.stringify({ email: targetEmail, isAdmin: true, time: Date.now() }))
+            );
+          } catch (e) {}
+
+          return data;
+        }
+
+        if (authError) {
+          throw authError;
+        }
+      } catch (err) {
+        console.warn('Supabase auth notice:', err.message);
+        setError(`Database Notice: ${err.message}`);
+        // Allow session fallback so verified owner can still access admin
+        const adminUser = { email: targetEmail, id: 'admin-muhammed-alfas', role: 'admin' };
+        setUser(adminUser);
+        setIsAdmin(true);
+        try {
+          sessionStorage.setItem(
+            AUTH_STORAGE_KEY,
+            btoa(JSON.stringify({ email: targetEmail, isAdmin: true, time: Date.now() }))
+          );
+        } catch (e) {}
+        return { user: adminUser };
+      }
+    }
+
+    // 2. Local fallback verification when Supabase is not connected
+    const adminUser = {
+      email: targetEmail,
+      id: 'admin-muhammed-alfas',
+      role: 'admin'
+    };
+
+    setUser(adminUser);
+    setIsAdmin(true);
+
+    try {
+      sessionStorage.setItem(
+        AUTH_STORAGE_KEY,
+        btoa(JSON.stringify({ email: targetEmail, isAdmin: true, time: Date.now() }))
+      );
+    } catch (e) {}
+
+    return { user: adminUser };
   };
 
   // Logout
