@@ -4,7 +4,7 @@ import { Palette, Check, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ThemeSwitcher = () => {
-  const { theme, setTheme } = usePortfolio();
+  const { theme, setTheme, clearPortfolioCache } = usePortfolio();
   const [isOpen, setIsOpen] = useState(false);
 
   const themes = [
@@ -120,8 +120,19 @@ export const ThemeSwitcher = () => {
               })}
             </div>
 
-            <div className="pt-2 text-center font-mono text-[10px] text-zinc-500 uppercase border-t border-zinc-800">
-              ⚡ LIVE THEME SYSTEM • ALL CONTENT IS PRESERVED
+            <div className="pt-2 flex flex-col items-center gap-2 border-t border-zinc-800">
+              <div className="text-center font-mono text-[10px] text-zinc-500 uppercase">
+                ⚡ LIVE THEME SYSTEM • ALL CONTENT IS PRESERVED
+              </div>
+              <button
+                onClick={() => {
+                  clearPortfolioCache();
+                }}
+                className="text-[10px] font-mono text-zinc-400 hover:text-yellow-400 underline uppercase cursor-pointer py-1"
+                title="Purges any stale device cache and reloads fresh content"
+              >
+                🔄 Force Refresh Latest Updates
+              </button>
             </div>
           </motion.div>
         )}
@@ -129,3 +140,4 @@ export const ThemeSwitcher = () => {
     </div>
   );
 };
+

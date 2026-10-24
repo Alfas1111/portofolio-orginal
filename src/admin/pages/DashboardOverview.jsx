@@ -4,12 +4,13 @@ import { useAuth } from '../../context/AuthContext';
 import { fetchAllContent, seedInitialData } from '../../lib/database';
 import { initialPortfolioData } from '../../data/initialData';
 import { isSupabaseConfigured } from '../../lib/supabase';
+import { usePortfolio, LOCAL_STORAGE_KEY } from '../../context/PortfolioContext';
 import {
   LayoutDashboard, User, Code, FolderGit2, GraduationCap, Briefcase,
   Award, Trophy, Rocket, Wrench, BookOpen, Image as ImageIcon, Share2,
   MessageSquare, BarChart3, Database, CheckCircle, XCircle, Upload,
   AlertTriangle, ExternalLink, FileText, ChevronRight,
-  Download, Copy, Smartphone, HelpCircle, Check, ArrowRight
+  Download, Copy, Smartphone, HelpCircle, Check, ArrowRight, RotateCcw
 } from 'lucide-react';
 
 const sectionMeta = {
@@ -32,6 +33,7 @@ const sectionMeta = {
 
 const DashboardOverview = () => {
   const { user } = useAuth();
+  const { clearPortfolioCache } = usePortfolio();
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [seeding, setSeeding] = useState(false);
@@ -42,7 +44,7 @@ const DashboardOverview = () => {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('bca_portfolio_data_v2');
+      const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (stored) {
         setHasLocalEdits(true);
       }
@@ -51,7 +53,7 @@ const DashboardOverview = () => {
 
   const getCurrentPortfolioData = () => {
     try {
-      const stored = localStorage.getItem('bca_portfolio_data_v2');
+      const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         return {
@@ -112,7 +114,7 @@ const DashboardOverview = () => {
     reader.onload = (event) => {
       try {
         const parsed = JSON.parse(event.target?.result);
-        localStorage.setItem('bca_portfolio_data_v2', JSON.stringify(parsed));
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(parsed));
         setHasLocalEdits(true);
         setCopyMessage('Imported successfully! Reloading to apply changes...');
         setTimeout(() => window.location.reload(), 1200);
@@ -186,7 +188,7 @@ const DashboardOverview = () => {
       </div>
 
       {/* Cross-Device Sync & Export Notification Banner */}
-      {!isSupabaseConfigured && (
+      {(!isSupabaseConfigured || sections.length === 0 || hasLocalEdits) && (
         <div className="bg-zinc-900 border-4 border-yellow-400 p-5 sm:p-6 shadow-[8px_8px_0px_#FFD700] space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-zinc-800 pb-4">
             <div className="flex items-center gap-3">
@@ -198,7 +200,7 @@ const DashboardOverview = () => {
                   // DESKTOP VS MOBILE SYNC STATUS
                 </span>
                 <h2 className="font-display text-lg sm:text-xl font-extrabold text-white uppercase tracking-tight">
-                  LOCAL STORAGE MODE: <span className="text-yellow-400">WHY MOBILE DOESN'T UPDATE</span>
+                  CROSS-DEVICE SYNC: <span className="text-yellow-400">HOW TO UPDATE MOBILE</span>
                 </h2>
               </div>
             </div>
@@ -211,7 +213,7 @@ const DashboardOverview = () => {
           </div>
 
           <p className="font-sans text-xs sm:text-sm text-zinc-300 leading-relaxed">
-            You updated a section on desktop, but your mobile phone still shows the original content. This happens because <strong>Supabase cloud database is not connected</strong>. Your edits are currently saved only inside this desktop browser's local storage. When you open the same link on your phone, mobile has its own isolated storage and falls back to default data.
+            When you edit sections in this admin panel, your edits are saved in this browser. To ensure mobile devices and all public visitors see your newest updates immediately, use <strong>Method 1: Download initialData.js and git push</strong>.
           </p>
 
           {/* Quick Action Buttons */}
@@ -260,6 +262,19 @@ const DashboardOverview = () => {
                 <span>IMPORT JSON</span>
                 <input type="file" accept=".json" onChange={handleImportJSON} className="hidden" />
               </label>
+
+              <button
+                onClick={() => {
+                  if (window.confirm('Reset this browser cache to the latest deployed version and reload?')) {
+                    clearPortfolioCache();
+                  }
+                }}
+                className="px-3 py-2 bg-red-950/80 text-red-300 hover:text-white hover:bg-red-900 font-mono text-xs font-bold flex items-center gap-1.5 border border-red-700 cursor-pointer"
+                title="Wipes local cached drafts on this device and reloads from deployed code"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>PURGE LOCAL CACHE</span>
+              </button>
             </div>
 
             {copyMessage && (

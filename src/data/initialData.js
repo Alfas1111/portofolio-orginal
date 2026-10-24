@@ -129,7 +129,80 @@ export const initialPortfolioData = {
       }
     ]
   },
-  "projects": [],
+  "projects": [
+    {
+      "id": "p1",
+      "title": "Music Player Website",
+      "category": "Web Development",
+      "image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=900&auto=format&fit=crop",
+      "shortDescription": "An interactive music player website built using modern web technologies with a responsive interface and API integration.",
+      "fullDescription": "A full-featured web audio application with custom waveform visualizer, audio streaming controls, playlist creation, dark brutalist UI, and integration with Spotify API for live lyric syncing.",
+      "technologies": [
+        "React",
+        "JavaScript",
+        "HTML5 Audio",
+        "Tailwind CSS",
+        "Web Audio API"
+      ],
+      "github": "https://github.com/example/music-player-app",
+      "demo": "https://example.com/music-player",
+      "date": "2024"
+    },
+    {
+      "id": "p2",
+      "title": "DevFlow Code Hub",
+      "category": "Full Stack",
+      "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=900&auto=format&fit=crop",
+      "shortDescription": "A real-time developer snippet repository and markdown documentation sharing platform.",
+      "fullDescription": "Empowers computer applications students to store code templates, test syntax, share gists with custom access tokens, and format documentation using an embedded live code editor.",
+      "technologies": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Express",
+        "Tailwind CSS"
+      ],
+      "github": "https://github.com/example/devflow-hub",
+      "demo": "https://example.com/devflow",
+      "date": "2024"
+    },
+    {
+      "id": "p3",
+      "title": "CloudVault AWS Storage",
+      "category": "Cloud & Security",
+      "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=900&auto=format&fit=crop",
+      "shortDescription": "Secure cloud document storage manager connected directly to AWS S3 buckets.",
+      "fullDescription": "Provides encrypted file uploading, presigned URL creation, folder organization, and direct streaming of video/audio assets backed by AWS IAM policies.",
+      "technologies": [
+        "React",
+        "AWS S3",
+        "Node.js",
+        "JavaScript",
+        "JWT Auth"
+      ],
+      "github": "https://github.com/example/cloud-vault",
+      "demo": "https://example.com/cloudvault",
+      "date": "2024"
+    },
+    {
+      "id": "p4",
+      "title": "BCA Smart Study Portal",
+      "category": "Academic / College",
+      "image": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=900&auto=format&fit=crop",
+      "shortDescription": "All-in-one resource hub for BCA students featuring syllabus trackers, notes, and CGPA calculators.",
+      "fullDescription": "Built specifically to solve resource fragmentation for computer application students. Includes semester subject roadmaps, past examination papers, interactive CGPA predictor, and peer note sharing.",
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "LocalStorage",
+        "Bootstrap"
+      ],
+      "github": "https://github.com/example/bca-study-portal",
+      "demo": "https://example.com/bca-portal",
+      "date": "2023"
+    }
+  ],
   "education": [
     {
       "id": "e1",
@@ -329,7 +402,29 @@ export const initialPortfolioData = {
       "verifyLink": ""
     }
   ],
-  "achievements": [],
+  "achievements": [
+    {
+      "id": "a1",
+      "title": "1st Winner — National Student Hackathon 2024",
+      "category": "Hackathon",
+      "description": "Designed and built an AI-assisted real-time collaborative code review portal in 24 hours competing against 40+ college teams.",
+      "date": "2024"
+    },
+    {
+      "id": "a2",
+      "title": "Academic Honor Roll — Top 3 in BCA Department",
+      "category": "Academic",
+      "description": "Awarded Certificate of Merit for consecutive semester GPA above 9.0 in Computer Applications.",
+      "date": "2023 - 2024"
+    },
+    {
+      "id": "a3",
+      "title": "Technical Lead — College Coding Club",
+      "category": "Leadership",
+      "description": "Mentored 120+ junior BCA students in Java fundamentals, Data Structures, and Git/GitHub workflows.",
+      "date": "2023 – Present"
+    }
+  ],
   "startupIdeas": [
     {
       "id": "i1792513088586",
@@ -339,13 +434,98 @@ export const initialPortfolioData = {
       "concept": "The customer refuels their vehicle at a petrol pump.    The software records the amount paid, price per litre, fuel type, and litres received.    The system calculates the expected fuel quantity and stores the transaction.    Vehicle data or user-entered odometer readings help calculate mileage.    A compatible sensor, if developed and validated, measures selected fuel properties.    The software presents understandable results and alerts the user to unusual readings.    The customer views their fuel history, mileage, expenses, and available fuel-quality information on a dashboard.",
       "currentStage": "",
       "futureVision": ""
+    },
+    {
+      "id": "i1",
+      "name": "DevFlow AI Workspace",
+      "problem": "Computer science and BCA students waste hours context-switching between notes, IDEs, code snippet managers, and study PDFs.",
+      "solution": "An integrated browser-based workstation that uses AI to organize code snippets, generate instant study flashcards from lecture PDFs, and auto-detect syntax errors.",
+      "concept": "Notion meets VS Code tailored specifically for computer science undergrads.",
+      "currentStage": "Prototyping MVP",
+      "futureVision": "Expand into a worldwide collaborative ecosystem for CS/IT universities and tech bootcamp students."
+    },
+    {
+      "id": "i2",
+      "name": "SkillBridge Micro-Internships",
+      "problem": "Early-stage college students struggle to get industry experience because companies prefer 3rd/4th year engineering students.",
+      "solution": "A micro-task platform where startups post 10-hour real project tasks (like fixing a React bug or writing a SQL query) that BCA/CS students can solve for verified credentials.",
+      "concept": "Upwork for college students backed by university skill verification.",
+      "currentStage": "Concept & Validation",
+      "futureVision": "Become the primary talent pipeline for early-stage tech founders hiring junior developers."
     }
   ],
-  "services": [],
-  "blog": [],
-  "gallery": [],
+  "services": [
+    {
+      "id": "s1",
+      "title": "Full-Stack Web App Development",
+      "description": "Custom, responsive web applications engineered with React, Node.js, and modern styling libraries built for speed and security."
+    },
+    {
+      "id": "s2",
+      "title": "MVP Development for Tech Startups",
+      "description": "Fast turn-around prototyping to turn product concepts into functional live websites ready for investor demos."
+    },
+    {
+      "id": "s3",
+      "title": "Cloud Infrastructure Setup (AWS)",
+      "description": "Deployment of web assets to AWS S3, CloudFront, EC2 instances, and DNS domain configuration."
+    },
+    {
+      "id": "s4",
+      "title": "UI/UX Code Refactoring",
+      "description": "Modernizing clunky, slow frontend codebase to sleek brutalist high-contrast responsive designs."
+    }
+  ],
+  "blog": [
+    {
+      "id": "b1",
+      "title": "How I Mastered Data Structures in Java as a BCA Student",
+      "date": "Aug 12, 2024",
+      "readTime": "5 min read",
+      "summary": "My step-by-step roadmap to understanding Arrays, Linked Lists, Trees, and Graph algorithms with practical problem solving on LeetCode.",
+      "content": "When I started my BCA degree, Data Structures felt overwhelming. By committing to 2 problem sets daily in Java and visualizing memory allocation step by step, complex graph traversals became second nature..."
+    },
+    {
+      "id": "b2",
+      "title": "Building Modern Web Interfaces with High Contrast Brutalism",
+      "date": "Jul 28, 2024",
+      "readTime": "4 min read",
+      "summary": "Why yellow and black typography creates unforgettable visual impressions for developer portfolios.",
+      "content": "Generic gray-on-white websites blur together. Bold yellow background, sharp black borders, oversized headings, and micro-interactions command attention immediately..."
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "title": "Hackathon Victory Moment",
+      "category": "Hackathons",
+      "caption": "Winning 1st place with our team project at National Student Hackathon 2024.",
+      "url": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "g2",
+      "title": "Tech Workshop Speaker",
+      "category": "Tech Events",
+      "caption": "Conducting a hands-on React & Git workshop for 100+ first-year BCA students.",
+      "url": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "g3",
+      "title": "Developer Setup & Workstation",
+      "category": "Workspace",
+      "caption": "Dual monitor setup where late-night code and startup ideas come alive.",
+      "url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "g4",
+      "title": "Campus Tech Fest Team",
+      "category": "College Life",
+      "caption": "With the organizing committee of Apex University Tech Fest 2024.",
+      "url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop"
+    }
+  ],
   "social": {
-    "linkedin": "www.linkedin.com/in/muhammed-alfas-0b5b08333",
+    "linkedin": "https://www.linkedin.com/in/muhammed-alfas-0b5b08333/?isSelfProfile=true",
     "github": "https://github.com/Alfas1111",
     "instagram": "https://www.instagram.com/muhammed__alfas___?exln=MTVicWp1c2pmNHR0aA==",
     "facebook": "",

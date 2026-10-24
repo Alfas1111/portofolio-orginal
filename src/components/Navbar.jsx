@@ -3,7 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { Menu, X, ArrowRight } from 'lucide-react';
 
 export const Navbar = () => {
-  const { data } = usePortfolio();
+  const { data, isLiveSyncActive } = usePortfolio();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -79,9 +79,17 @@ export const Navbar = () => {
               <span className="font-heading text-lg font-bold tracking-tight text-white group-hover:text-yellow-400 transition-colors">
                 {data.personal.name || 'MUHAMMED ALFAS'}
               </span>
-              <span className="text-[10px] font-mono tracking-wider text-zinc-400 uppercase -mt-1">
-                BCA • Software Engineer
-              </span>
+              <div className="flex items-center gap-2 -mt-1">
+                <span className="text-[10px] font-mono tracking-wider text-zinc-400 uppercase">
+                  BCA • Software Engineer
+                </span>
+                {isLiveSyncActive && (
+                  <span className="inline-flex items-center gap-1 text-[9px] font-mono font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-500/40 px-1.5 py-0.2 rounded" title="Supabase Live Cross-Device Sync Active">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    SYNC
+                  </span>
+                )}
+              </div>
             </div>
           </a>
 

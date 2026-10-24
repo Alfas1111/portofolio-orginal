@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { fetchSectionContent, saveSectionContent, togglePublishStatus } from '../../lib/database';
 import { initialPortfolioData } from '../../data/initialData';
 import { isSupabaseConfigured } from '../../lib/supabase';
-import { usePortfolio } from '../../context/PortfolioContext';
+import { usePortfolio, LOCAL_STORAGE_KEY } from '../../context/PortfolioContext';
 import {
   Save, Eye, EyeOff, CheckCircle, AlertCircle, Loader2, RotateCcw, ArrowLeft,
   AlertTriangle, Smartphone
@@ -25,7 +25,7 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
   const [isPublished, setIsPublished] = useState(true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState(null); // { type: 'success' | 'error', text: '' }
+  const [message, setMessage] = useState(null); // { type: 'success' | 'error' | 'warning', text: '' }
   const [hasChanges, setHasChanges] = useState(false);
 
   // Load section content
@@ -35,17 +35,28 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
       try {
         if (isSupabaseConfigured) {
           const data = await fetchSectionContent(sectionKey);
-          if (data) {
+          if (data && data.content) {
             setContent(data.content);
             setIsPublished(data.is_published);
           } else {
-            // Use initial data as fallback
+            // Check local storage before fallback
+            const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (stored) {
+              try {
+                const parsed = JSON.parse(stored);
+                if (parsed[sectionKey] !== undefined) {
+                  setContent(parsed[sectionKey]);
+                  setLoading(false);
+                  return;
+                }
+              } catch (e) {}
+            }
             const fallback = initialPortfolioData[sectionKey];
             setContent(fallback || {});
           }
         } else {
           // Check localStorage first
-          const stored = localStorage.getItem('bca_portfolio_data_v2');
+          const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
           if (stored) {
             try {
               const parsed = JSON.parse(stored);
@@ -93,22 +104,26 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
     setMessage(null);
   }, []);
 
-  // Save content to database
+  // Save content to database (with automatic local fallback)
   const handleSave = async (publish = isPublished) => {
-    if (!isSupabaseConfigured) {
+    const saveLocally = () => {
       try {
-        const stored = localStorage.getItem('bca_portfolio_data_v2');
+        const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
         const parsed = stored ? JSON.parse(stored) : { ...initialPortfolioData };
         parsed[sectionKey] = content;
-        localStorage.setItem('bca_portfolio_data_v2', JSON.stringify(parsed));
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(parsed));
         if (updateData) {
           updateData({ [sectionKey]: content });
         }
       } catch (e) {}
+    };
 
+    if (!isSupabaseConfigured) {
+      saveLocally();
+      setHasChanges(false);
       setMessage({
-        type: 'error',
-        text: 'DATABASE NOT CONNECTED! Changes are saved locally on this device only. To sync across mobile and all devices, connect Supabase in Vercel or use Sync Tools in Dashboard.'
+        type: 'warning',
+        text: 'DATABASE NOT CONNECTED: Changes saved locally on this device. To sync with mobile and public visitors, download initialData.js in Dashboard & git push.'
       });
       return;
     }
@@ -117,8 +132,16 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
     setMessage(null);
     try {
       await saveSectionContent(sectionKey, content, publish);
+      saveLocally();
       if (updateData) {
         updateData({ [sectionKey]: content });
+      }
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        try {
+          const bc = new BroadcastChannel('portfolio_sync_bus');
+          bc.postMessage({ type: 'SECTION_SAVED', section: sectionKey });
+          bc.close();
+        } catch (e) {}
       }
       setIsPublished(publish);
       setHasChanges(false);
@@ -130,9 +153,12 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
       });
     } catch (err) {
       console.error('Save error:', err);
+      // Fallback: save locally so user NEVER loses their work!
+      saveLocally();
+      setHasChanges(false);
       setMessage({
-        type: 'error',
-        text: `Server save failed: ${err.message || 'Unknown network error'}. Changes were not saved to database.`
+        type: 'warning',
+        text: `✓ Saved locally on this browser! (Notice: Server sync requires verified Supabase Auth [${err.message}]. To update mobile visitors right now, use Dashboard > Download initialData.js & git push).`
       });
     } finally {
       setSaving(false);
@@ -156,6 +182,13 @@ const SectionEditor = ({ sectionKey, title, icon: Icon, children }) => {
     setSaving(true);
     try {
       await togglePublishStatus(sectionKey, newStatus);
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        try {
+          const bc = new BroadcastChannel('portfolio_sync_bus');
+          bc.postMessage({ type: 'SECTION_SAVED', section: sectionKey });
+          bc.close();
+        } catch (e) {}
+      }
       setIsPublished(newStatus);
       setMessage({
         type: 'success',

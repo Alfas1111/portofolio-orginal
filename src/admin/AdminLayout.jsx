@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { usePortfolio } from '../context/PortfolioContext';
 import {
   LayoutDashboard, User, BarChart3, Code, FolderGit2, GraduationCap,
   Briefcase, Award, Trophy, Rocket, Wrench, BookOpen, Image as ImageIcon,
-  Share2, MessageSquare, FileText, LogOut, Menu, X, ChevronRight, Shield
+  Share2, MessageSquare, FileText, LogOut, Menu, X, ChevronRight, Shield, Radio
 } from 'lucide-react';
 
 const sidebarLinks = [
@@ -29,6 +30,7 @@ const sidebarLinks = [
 
 const AdminLayout = () => {
   const { user, logout } = useAuth();
+  const { isLiveSyncActive } = usePortfolio();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -140,10 +142,22 @@ const AdminLayout = () => {
           >
             <Menu className="w-5 h-5" />
           </button>
-          <div className="font-mono text-[10px] text-zinc-600 uppercase tracking-widest hidden sm:block">
-            PORTFOLIO CONTENT MANAGEMENT SYSTEM
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest hidden sm:inline">
+              PORTFOLIO CMS
+            </span>
+            {isLiveSyncActive ? (
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-500/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                SUPABASE LIVE SYNC ACTIVE
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-500 bg-zinc-900 border border-zinc-800">
+                OFFLINE CACHE
+              </span>
+            )}
           </div>
-          <div className="font-mono text-[10px] text-zinc-600 uppercase">
+          <div className="font-mono text-[10px] text-zinc-500 uppercase">
             {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
           </div>
         </header>

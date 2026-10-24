@@ -1,10 +1,10 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Award, ExternalLink, Calendar, ShieldCheck, Eye, FileText } from 'lucide-react';
+import { Award, ExternalLink, Calendar, ShieldCheck, Eye, FileText, RefreshCw, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Certifications = () => {
-  const { data, setCertModalData } = usePortfolio();
+  const { data, setCertModalData, isLoading, isSyncing, syncError, refreshContent } = usePortfolio();
   const certifications = data?.certifications || [];
 
   return (
@@ -25,11 +25,67 @@ export const Certifications = () => {
             <p className="font-mono text-xs font-bold text-black/80 max-w-xs uppercase">
               Industry recognized cloud & developer certifications.
             </p>
+
+            {/* Cloud Sync Status & Manual Refresh Trigger */}
+            <button
+              onClick={() => refreshContent()}
+              disabled={isSyncing}
+              title="Refresh latest credentials from cloud"
+              className="px-3 py-1.5 bg-black text-yellow-400 hover:bg-zinc-900 border-2 border-black font-mono text-[11px] font-bold uppercase flex items-center gap-1.5 cursor-pointer transition-all shadow-[2px_2px_0px_#000]"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-white' : ''}`} />
+              <span>{isSyncing ? 'SYNCING...' : 'REFRESH'}</span>
+            </button>
           </div>
         </div>
 
-        {/* Certifications Showcase Grid */}
-        {certifications && certifications.length > 0 ? (
+        {/* Loading State: High-contrast Brutalist Skeletons */}
+        {isLoading && certifications.length === 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[1, 2].map((n) => (
+              <div
+                key={n}
+                className="bg-black text-white p-6 sm:p-8 border-4 border-black shadow-[8px_8px_0px_#000] space-y-6 animate-pulse"
+              >
+                <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-zinc-800 border-2 border-zinc-700"></div>
+                    <div className="space-y-2">
+                      <div className="w-24 h-3 bg-zinc-800 rounded"></div>
+                      <div className="w-48 h-5 bg-zinc-700 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="w-16 h-6 bg-zinc-800"></div>
+                </div>
+                <div className="aspect-[16/9] bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center">
+                  <span className="font-mono text-xs text-yellow-400 font-bold uppercase tracking-wider">
+                    FETCHING LATEST CERTIFICATES...
+                  </span>
+                </div>
+                <div className="w-36 h-4 bg-zinc-800 rounded"></div>
+                <div className="pt-4 border-t border-zinc-800 flex gap-2">
+                  <div className="flex-1 h-9 bg-zinc-900 border border-zinc-800"></div>
+                  <div className="flex-1 h-9 bg-zinc-800"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : syncError && certifications.length === 0 ? (
+          /* Error State */
+          <div className="bg-black text-white p-12 border-4 border-black text-center space-y-4 shadow-[8px_8px_0px_#000]">
+            <AlertTriangle className="w-12 h-12 text-yellow-400 mx-auto" />
+            <h3 className="font-heading text-2xl font-bold uppercase">UNABLE TO LOAD CERTIFICATES</h3>
+            <p className="font-mono text-xs text-zinc-400 max-w-md mx-auto">
+              {syncError || 'Could not connect to the cloud database. Check your network connection or tap retry below.'}
+            </p>
+            <button
+              onClick={() => refreshContent()}
+              className="brutal-btn bg-yellow-400 text-black hover:bg-white hover:text-black px-6 py-2.5 font-bold uppercase text-xs inline-flex items-center gap-2"
+            >
+              <RefreshCw className="w-4 h-4" /> RETRY SYNC
+            </button>
+          </div>
+        ) : certifications && certifications.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {certifications.map((cert, idx) => {
               const isPdf = cert.image?.startsWith('data:application/pdf') ||

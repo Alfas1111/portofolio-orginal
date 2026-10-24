@@ -25,3 +25,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Backup and temp files
+recovered_master_portfolio.json
+.temp/
